@@ -9,475 +9,511 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ═══════════════════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════════════
        TOKENS
-    ═══════════════════════════════════════════════════════════════ */
+    ═══════════════════════════════════════════════════ */
     :root {
-      --negro:    #111318;
-      --navy:     #192341;
-      --navy-alt: #0F1829;
-      --texto:    #1C1917;
+      --negro:    #0D0D0D;
+      --negro-2:  #161616;
+      --texto:    #1A1A1A;
       --muted:    #6B6560;
       --linea:    #E5E0D9;
-      --fondo:    #F7F5F1;
+      --fondo:    #F7F4EF;
       --blanco:   #FFFFFF;
       --oro:      #B8912A;
-
       --wa:       #25D366;
-      --exito:    #15803D;
-      --error:    #DC2626;
-
-      --radio:    3px;
-      --radio-g:  6px;
-      --ancho:    1180px;
 
       --serif: "Instrument Serif", Georgia, serif;
       --sans:  "Inter", "Helvetica Neue", Arial, sans-serif;
 
-      --sombra:   0 1px 3px rgba(17,19,24,.06), 0 6px 20px rgba(17,19,24,.07);
       --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
       --ease-dr:  cubic-bezier(0.32, 0.72, 0, 1);
+      --sombra:   0 1px 3px rgba(13,13,13,.06), 0 8px 28px rgba(13,13,13,.08);
+      --ancho: 1180px;
+      --radio: 3px;
     }
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) {
-        --negro: #F5F3EF; --navy: #A8B8D8; --navy-alt: #8AA0C8;
-        --texto: #EDE9E3; --muted: #9A948E; --linea: #2A2520;
-        --fondo: #1A1714; --blanco: #111318; --oro: #C8A040;
+        --negro: #EDE9E3; --texto: #EDE9E3; --muted: #9A948E; --linea: #2A2520; --fondo: #1A1714; --blanco: #111318;
       }
-    }
-    :root[data-theme="dark"] {
-      --negro: #F5F3EF; --navy: #A8B8D8; --navy-alt: #8AA0C8;
-      --texto: #EDE9E3; --muted: #9A948E; --linea: #2A2520;
-      --fondo: #1A1714; --blanco: #111318; --oro: #C8A040;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+    html { scroll-behavior: smooth; scroll-padding-top: 72px; }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
     }
-    body { font-family: var(--sans); font-size: 16px; line-height: 1.65; color: var(--texto); background: var(--blanco); -webkit-font-smoothing: antialiased; }
-    img  { max-width: 100%; display: block; }
-    a    { color: inherit; text-decoration: none; }
+    body { font-family: var(--sans); font-size: 16px; line-height: 1.65; color: var(--texto); background: var(--blanco); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    img { max-width: 100%; display: block; }
+    a   { color: inherit; text-decoration: none; }
     :focus-visible { outline: 2px solid var(--oro); outline-offset: 3px; }
-    .c   { width: 100%; max-width: var(--ancho); margin: 0 auto; padding: 0 24px; }
+    .c  { width: 100%; max-width: var(--ancho); margin: 0 auto; padding: 0 24px; }
 
-    /* ── ROTULO ── */
-    .rotulo {
-      font-family: var(--sans); font-size: .68rem; font-weight: 600;
-      text-transform: uppercase; letter-spacing: .2em; color: var(--muted);
-      margin-bottom: 14px; display: block;
+    /* ═══════════════════════════════════════════════════
+       MARQUEE BAR
+    ═══════════════════════════════════════════════════ */
+    .mq-bar {
+      background: var(--fondo);
+      border-bottom: 1px solid var(--linea);
+      height: 38px;
+      overflow: hidden;
+      display: flex; align-items: center;
+      position: relative; z-index: 61;
+    }
+    .mq-track {
+      display: flex;
+      white-space: nowrap;
+      animation: marquee 45s linear infinite;
+      will-change: transform;
+    }
+    @media (prefers-reduced-motion: reduce) { .mq-track { animation: none; } }
+    .mq-item {
+      flex-shrink: 0;
+      padding: 0 0;
+      font-size: .64rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .22em;
+      color: var(--negro);
+    }
+    .mq-sep { color: var(--muted); padding: 0 20px; }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
     }
 
-    /* ── BOTONES ── */
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 12px 22px; border-radius: var(--radio);
-      font-family: var(--sans); font-size: .88rem; font-weight: 600;
-      cursor: pointer; border: none; white-space: nowrap;
-      transition: transform 150ms var(--ease-out), opacity 150ms ease, background 140ms ease;
-      text-decoration: none;
-    }
-    .btn:active { transform: scale(0.97); }
-    .btn-negro    { background: var(--negro); color: var(--blanco); }
-    .btn-negro:hover { opacity: .85; }
-    .btn-linea    { background: transparent; color: var(--negro); border: 1.5px solid var(--linea); }
-    .btn-linea:hover { border-color: var(--negro); }
-    .btn-blanco   { background: var(--blanco); color: var(--negro); }
-    .btn-blanco:hover { opacity: .92; }
-    .btn-wa       { background: var(--wa); color: var(--blanco); }
-    .btn-wa:hover { opacity: .9; }
-
-    /* ════════════════ HEADER ════════════════ */
+    /* ═══════════════════════════════════════════════════
+       HEADER — transparente sobre hero, sólido al scroll
+    ═══════════════════════════════════════════════════ */
     .hdr {
       position: sticky; top: 0; z-index: 60;
-      background: rgba(255,255,255,.92); backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--linea);
+      transition:
+        background 350ms ease,
+        border-color 350ms ease,
+        box-shadow 350ms ease;
+      background: transparent;
+      border-bottom: 1px solid transparent;
     }
-    .hdr-row {
-      display: flex; align-items: center; gap: 16px; height: 68px;
+    .hdr.solid {
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(14px);
+      border-bottom-color: var(--linea);
+      box-shadow: 0 1px 20px rgba(0,0,0,.06);
     }
+    .hdr-row { display: flex; align-items: center; gap: 16px; height: 68px; }
+
     .logo {
       display: flex; align-items: center; gap: 10px; flex: 0 0 auto;
-      color: var(--negro); font-weight: 700; font-size: .95rem;
-      letter-spacing: -.01em;
+      transition: color 350ms ease;
+      font-weight: 700; font-size: .9rem; letter-spacing: -.01em;
     }
     .logo-mark {
-      width: 32px; height: 32px; border: 1.5px solid var(--negro);
-      border-radius: 2px; display: grid; place-items: center;
-      font-size: .65rem; font-weight: 800; letter-spacing: .05em; color: var(--negro);
+      width: 32px; height: 32px; border-radius: 2px;
+      display: grid; place-items: center;
+      font-size: .65rem; font-weight: 800; letter-spacing: .05em;
+      border: 1.5px solid currentColor;
+      transition: border-color 350ms ease, color 350ms ease;
     }
-    .logo-name em {
-      font-style: normal; font-family: var(--serif); font-weight: 400;
-      font-size: 1.08rem;
-    }
+    .logo-name { font-family: var(--serif); font-weight: 400; font-size: 1.05rem; font-style: italic; }
+    .hdr:not(.solid) .logo { color: var(--negro); }
+    .hdr.solid .logo { color: var(--negro); }
+
     .nav { margin-left: auto; display: flex; align-items: center; gap: 2px; }
     .nav a {
       padding: 7px 13px; border-radius: var(--radio);
-      font-size: .86rem; font-weight: 500; color: var(--muted);
-      transition: color 140ms ease, background 140ms ease;
+      font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      transition: color 200ms ease, background 200ms ease;
     }
-    .nav a:hover { color: var(--negro); background: var(--fondo); }
+    .hdr:not(.solid) .nav a { color: var(--muted); }
+    .hdr:not(.solid) .nav a:hover { color: var(--negro); background: var(--fondo); }
+    .hdr.solid .nav a { color: var(--muted); }
+    .hdr.solid .nav a:hover { color: var(--negro); background: var(--fondo); }
+
     .hdr-cta { margin-left: 10px; }
+    .btn-hdr {
+      padding: 9px 20px; border-radius: var(--radio);
+      font-family: var(--sans); font-size: .8rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      cursor: pointer; border: none; transition: all 150ms var(--ease-out);
+    }
+    .hdr:not(.solid) .btn-hdr { background: var(--negro); color: var(--blanco); }
+    .hdr:not(.solid) .btn-hdr:hover { opacity: .85; }
+    .hdr.solid .btn-hdr { background: var(--negro); color: var(--blanco); }
+    .hdr.solid .btn-hdr:hover { opacity: .85; }
+    .btn-hdr:active { transform: scale(0.97); }
     @media (max-width: 760px) { .nav, .hdr-cta { display: none; } }
 
-    /* ════════════════ HERO ════════════════ */
+    /* ═══════════════════════════════════════════════════
+       HERO — pantalla completa, negro
+    ═══════════════════════════════════════════════════ */
     .hero {
-      background: var(--navy);
-      color: var(--blanco);
-      min-height: 600px;
-      display: flex; align-items: center;
+      min-height: calc(100vh - 106px);
+      background: var(--blanco);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
       position: relative; overflow: hidden;
+      text-align: center;
     }
+    /* Trama de tela diagonal — muy sutil */
     .hero::before {
       content: '';
-      position: absolute; inset: 0; z-index: 0;
+      position: absolute; inset: 0;
       background-image:
-        repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0, rgba(255,255,255,.025) 1px, transparent 1px, transparent 12px),
-        repeating-linear-gradient( 45deg, rgba(255,255,255,.025) 0, rgba(255,255,255,.025) 1px, transparent 1px, transparent 12px);
+        repeating-linear-gradient(135deg, rgba(0,0,0,.025) 0, rgba(0,0,0,.025) 1px, transparent 1px, transparent 14px),
+        repeating-linear-gradient( 45deg, rgba(0,0,0,.025) 0, rgba(0,0,0,.025) 1px, transparent 1px, transparent 14px);
+      pointer-events: none;
     }
+    .hero::after { display: none; }
     .hero-inner {
       position: relative; z-index: 1;
-      padding: clamp(72px, 10vw, 120px) 0;
-      max-width: 680px;
+      padding: 60px 24px;
+      max-width: calc(var(--ancho) + 48px);
+      margin: 0 auto; width: 100%;
+      text-align: center;
     }
-    .hero .rotulo { color: rgba(255,255,255,.45); }
+    .hero-eyebrow {
+      font-size: .66rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .24em; color: var(--muted);
+      display: block; margin-bottom: 24px;
+    }
     .hero h1 {
-      font-family: var(--serif); font-weight: 400; font-style: italic;
-      font-size: clamp(2.4rem, 5.5vw, 3.8rem);
-      line-height: 1.1; letter-spacing: -.01em;
-      color: var(--blanco); margin-bottom: 22px;
+      font-family: var(--sans);
+      font-weight: 800; font-style: normal;
+      font-size: clamp(3rem, 8vw, 6.8rem);
+      line-height: 1.0; letter-spacing: -.04em;
+      color: var(--negro);
+      max-width: 900px;
+      margin-bottom: 32px;
     }
-    .hero p {
-      font-size: 1.05rem; line-height: 1.72;
-      color: rgba(255,255,255,.65); max-width: 480px; margin-bottom: 40px;
+    .hero-sub {
+      font-size: 1rem; line-height: 1.7;
+      color: var(--muted);
+      max-width: 420px; margin-bottom: 48px; margin-left: auto; margin-right: auto;
     }
-    .hero-btns { display: flex; flex-wrap: wrap; gap: 10px; }
+    .hero-btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .btn-hero-p {
+      padding: 13px 26px; background: var(--negro); color: var(--blanco);
+      border: none; border-radius: var(--radio); cursor: pointer;
+      font-family: var(--sans); font-size: .84rem; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase;
+      transition: transform 150ms var(--ease-out), opacity 150ms ease;
+      text-decoration: none;
+    }
+    .btn-hero-p:hover { opacity: .88; }
+    .btn-hero-p:active { transform: scale(0.97); }
+    .btn-hero-s {
+      padding: 13px 26px; background: transparent; color: var(--muted);
+      border: 1px solid var(--linea); border-radius: var(--radio); cursor: pointer;
+      font-family: var(--sans); font-size: .84rem; font-weight: 600;
+      letter-spacing: .06em; text-transform: uppercase;
+      transition: all 150ms ease; text-decoration: none;
+    }
+    .btn-hero-s:hover { border-color: var(--negro); color: var(--negro); }
+    .btn-hero-s:active { transform: scale(0.97); }
+    /* Scroll hint */
+    .hero-scroll {
+      position: absolute; bottom: 32px; right: 32px; z-index: 1;
+      font-size: .6rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .24em; color: var(--muted);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hero-scroll-line {
+      width: 32px; height: 1px; background: var(--linea);
+      animation: pulse-line 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse-line { 0%,100%{opacity:.3} 50%{opacity:.8} }
 
-    /* ════════════════ STATS ════════════════ */
+    /* ═══════════════════════════════════════════════════
+       STATS
+    ═══════════════════════════════════════════════════ */
     .stats { border-bottom: 1px solid var(--linea); }
     .stats-row {
       display: grid; grid-template-columns: repeat(4, 1fr);
       background: var(--linea); gap: 1px;
     }
     @media (max-width: 600px) { .stats-row { grid-template-columns: 1fr 1fr; } }
-    .stat { background: var(--blanco); padding: 32px 24px; }
-    .stat-num {
+    .stat { background: var(--blanco); padding: 36px 24px; }
+    .stat-n {
       font-family: var(--serif); font-weight: 400;
-      font-size: clamp(2rem, 3.5vw, 2.8rem);
-      line-height: 1; color: var(--negro); margin-bottom: 6px;
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      line-height: 1; color: var(--negro); margin-bottom: 8px;
     }
-    .stat-lbl {
-      font-size: .75rem; font-weight: 600; text-transform: uppercase;
-      letter-spacing: .12em; color: var(--muted);
+    .stat-l {
+      font-size: .7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .15em; color: var(--muted);
     }
 
-    /* ════════════════ SECCIÓN ════════════════ */
+    /* ═══════════════════════════════════════════════════
+       SCROLL FADE IN
+    ═══════════════════════════════════════════════════ */
+    .fi {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+    }
+    .fi.in { opacity: 1; transform: translateY(0); }
+    .fi-d1 { transition-delay: 60ms; }
+    .fi-d2 { transition-delay: 120ms; }
+    .fi-d3 { transition-delay: 180ms; }
+    .fi-d4 { transition-delay: 240ms; }
+
+    /* ═══════════════════════════════════════════════════
+       SECCIONES
+    ═══════════════════════════════════════════════════ */
     .sec { padding: clamp(72px, 9vw, 112px) 0; }
-    .sec-hdr { margin-bottom: 56px; }
-    .sec-hdr h2 {
-      font-family: var(--serif); font-weight: 400;
-      font-size: clamp(1.7rem, 3.2vw, 2.4rem);
-      line-height: 1.2; color: var(--negro); margin-bottom: 14px;
-    }
-    .sec-hdr p { font-size: 1rem; color: var(--muted); max-width: 500px; line-height: 1.72; }
-    .sec-hdr.center { text-align: center; }
-    .sec-hdr.center p { margin: 0 auto; }
+    .rotulo { font-size: .66rem; font-weight: 600; text-transform: uppercase; letter-spacing: .22em; color: var(--muted); display: block; margin-bottom: 14px; }
+    .sec-h { font-family: var(--serif); font-weight: 400; font-size: clamp(1.8rem, 3.5vw, 2.6rem); line-height: 1.15; color: var(--negro); margin-bottom: 16px; }
+    .sec-p { font-size: 1rem; color: var(--muted); max-width: 480px; line-height: 1.72; }
 
-    /* ════════════════ RAZONES ════════════════ */
-    .razones {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1px;
-      border: 1px solid var(--linea); border-radius: var(--radio-g); overflow: hidden;
-    }
-    .razon {
-      padding: 32px 28px; background: var(--blanco);
-      transition: background 160ms ease;
-    }
+    /* ═══════════════════════════════════════════════════
+       RAZONES
+    ═══════════════════════════════════════════════════ */
+    .razones { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1px; border: 1px solid var(--linea); }
+    .razon { padding: 32px 28px; background: var(--blanco); transition: background 160ms ease; }
     .razon:hover { background: var(--fondo); }
-    .razon-ico {
-      width: 40px; height: 40px; color: var(--navy);
-      margin-bottom: 20px;
-    }
+    .razon-ico { width: 38px; height: 38px; color: var(--negro); margin-bottom: 20px; }
     .razon-ico svg { width: 100%; height: 100%; }
-    .razon h3 { font-size: .95rem; font-weight: 700; margin-bottom: 10px; color: var(--negro); }
-    .razon p  { font-size: .88rem; color: var(--muted); line-height: 1.68; }
+    .razon h3 { font-size: .93rem; font-weight: 700; margin-bottom: 10px; }
+    .razon p  { font-size: .86rem; color: var(--muted); line-height: 1.68; }
 
-    /* ════════════════ CATÁLOGO ════════════════ */
+    /* ═══════════════════════════════════════════════════
+       CATÁLOGO
+    ═══════════════════════════════════════════════════ */
     .catalogo-bg { background: var(--fondo); }
     .cats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 40px; }
     .cat {
       padding: 7px 16px; border-radius: 2px;
-      font-size: .82rem; font-weight: 600; cursor: pointer;
+      font-size: .74rem; font-weight: 700; cursor: pointer;
       border: 1px solid var(--linea); background: var(--blanco); color: var(--muted);
-      transition: all 140ms ease; letter-spacing: .02em;
+      text-transform: uppercase; letter-spacing: .08em;
+      transition: all 140ms ease;
     }
     .cat:hover, .cat.on { background: var(--negro); color: var(--blanco); border-color: var(--negro); }
     .cat:active { transform: scale(0.97); }
-    .prod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1px; border: 1px solid var(--linea); border-radius: var(--radio-g); overflow: hidden; }
-    .prod {
-      background: var(--blanco); display: flex; flex-direction: column;
-      transition: background 160ms ease;
+    .prod-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1px; border: 1px solid var(--linea);
     }
-    .prod:hover { background: var(--fondo); }
+    .prod { background: var(--blanco); display: flex; flex-direction: column; overflow: hidden; }
+    .prod:hover .prod-img-inner { transform: scale(1.02); }
 
-    /* Placeholder de tela — trama de tejido */
+    /* Placeholder oscuro estilo editorial — trama de tela horizontal */
     .prod-img {
-      aspect-ratio: 4/3; position: relative; overflow: hidden;
-      background-color: #ECEAE5;
+      aspect-ratio: 3/4; overflow: hidden;
+      background: var(--negro-2);
+    }
+    .prod-img-inner {
+      width: 100%; height: 100%;
+      background-color: #121212;
       background-image:
-        linear-gradient(rgba(25,35,65,.07) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(25,35,65,.07) 1px, transparent 1px),
-        linear-gradient(rgba(25,35,65,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(25,35,65,.04) 1px, transparent 1px);
-      background-size: 20px 20px, 20px 20px, 4px 4px, 4px 4px;
-      display: flex; align-items: flex-end; justify-content: flex-start;
+        repeating-linear-gradient(0deg, rgba(255,255,255,.028) 0, rgba(255,255,255,.028) 1px, transparent 1px, transparent 9px),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.012) 0, rgba(255,255,255,.012) 1px, transparent 1px, transparent 9px);
+      display: flex; flex-direction: column;
+      justify-content: space-between; padding: 16px;
+      transition: transform 500ms var(--ease-out);
     }
-    .prod-cat-tag {
-      margin: 0 0 14px 14px; padding: 4px 10px;
-      background: rgba(25,35,65,.85); color: rgba(255,255,255,.9);
-      font-size: .66rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .14em; border-radius: 2px;
+    .prod-sku {
+      font-size: .62rem; font-weight: 700; letter-spacing: .18em;
+      text-transform: uppercase; color: rgba(255,255,255,.25);
     }
-    .prod-body { padding: 18px 20px; flex: 1; }
-    .prod-num  { font-size: .72rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; margin-bottom: 6px; }
+    .prod-cat-pill {
+      align-self: flex-start;
+      padding: 5px 12px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(8px);
+      border-radius: 2px;
+      font-size: .66rem; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: rgba(255,255,255,.65);
+    }
+    .prod-body { padding: 20px 22px; flex: 1; border-bottom: 1px solid var(--linea); }
     .prod-nom  { font-size: .93rem; font-weight: 700; color: var(--negro); margin-bottom: 7px; line-height: 1.3; }
-    .prod-desc { font-size: .84rem; color: var(--muted); line-height: 1.6; }
-    .prod-pie  { padding: 14px 20px; border-top: 1px solid var(--linea); }
+    .prod-desc { font-size: .83rem; color: var(--muted); line-height: 1.6; }
+    .prod-pie  { padding: 14px 22px; }
     .btn-cot {
       width: 100%; padding: 10px; background: transparent;
       border: 1px solid var(--linea); border-radius: var(--radio);
-      font-family: var(--sans); font-size: .84rem; font-weight: 600;
+      font-family: var(--sans); font-size: .78rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .08em;
       color: var(--negro); cursor: pointer;
-      transition: background 140ms ease, border-color 140ms ease, transform 150ms var(--ease-out);
+      transition: background 140ms ease, border-color 140ms ease, color 140ms ease, transform 150ms var(--ease-out);
     }
     .btn-cot:hover  { background: var(--negro); color: var(--blanco); border-color: var(--negro); }
     .btn-cot:active { transform: scale(0.97); }
 
-    /* ════════════════ PROCESO ════════════════ */
-    .proceso-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 48px 32px;
+    /* ═══════════════════════════════════════════════════
+       PROCESO
+    ═══════════════════════════════════════════════════ */
+    .proceso-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 48px 32px; }
+    .paso-n {
+      font-family: var(--serif); font-size: clamp(4rem, 8vw, 6.5rem);
+      font-weight: 400; line-height: 1;
+      color: var(--linea); margin-bottom: 20px;
     }
-    .paso-num-txt {
-      font-family: var(--serif); font-size: 3rem; font-weight: 400;
-      color: var(--linea); line-height: 1; margin-bottom: 16px;
-    }
-    .paso h3 { font-size: .95rem; font-weight: 700; margin-bottom: 10px; color: var(--negro); }
-    .paso p  { font-size: .86rem; color: var(--muted); line-height: 1.68; }
+    .paso h3 { font-size: .93rem; font-weight: 700; margin-bottom: 10px; }
+    .paso p  { font-size: .85rem; color: var(--muted); line-height: 1.68; }
 
-    /* ════════════════ CONTACTO ════════════════ */
+    /* ═══════════════════════════════════════════════════
+       CONTACTO
+    ═══════════════════════════════════════════════════ */
     .contacto-bg { background: var(--fondo); }
-    .contacto-layout {
-      display: grid; grid-template-columns: 1fr 1.5fr; gap: 72px; align-items: start;
-    }
+    .contacto-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 72px; align-items: start; }
     @media (max-width: 760px) { .contacto-layout { grid-template-columns: 1fr; gap: 48px; } }
-    .contacto-info h2 { margin-bottom: 16px; }
-    .contacto-info > p { color: var(--muted); margin-bottom: 36px; line-height: 1.72; }
-    .info-fila { display: flex; gap: 14px; margin-bottom: 20px; align-items: flex-start; }
-    .info-ico  {
-      width: 32px; height: 32px; min-width: 32px;
-      border: 1px solid var(--linea); border-radius: var(--radio);
-      display: grid; place-items: center; color: var(--navy);
-    }
+    .info-row { display: flex; gap: 14px; margin-bottom: 20px; align-items: flex-start; }
+    .info-ico { width: 32px; height: 32px; min-width: 32px; border: 1px solid var(--linea); border-radius: var(--radio); display: grid; place-items: center; color: var(--negro); }
     .info-ico svg { width: 16px; height: 16px; }
-    .info-txt strong { display: block; font-size: .82rem; font-weight: 700; margin-bottom: 2px; }
+    .info-txt strong { display: block; font-size: .8rem; font-weight: 700; margin-bottom: 2px; }
     .info-txt span   { font-size: .84rem; color: var(--muted); }
-
-    /* Formulario */
     .form { display: flex; flex-direction: column; gap: 15px; }
     .f-par { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     @media (max-width: 480px) { .f-par { grid-template-columns: 1fr; } }
     .f { display: flex; flex-direction: column; gap: 6px; }
-    .f label { font-size: .8rem; font-weight: 600; color: var(--texto); letter-spacing: .01em; }
-    .f input, .f select, .f textarea {
-      width: 100%; padding: 10px 13px;
-      border: 1px solid var(--linea); border-radius: var(--radio);
-      font-family: var(--sans); font-size: .9rem; color: var(--texto);
-      background: var(--blanco);
-      transition: border-color 140ms ease, box-shadow 140ms ease;
-      appearance: none; -webkit-appearance: none;
-    }
-    .f input:focus, .f select:focus, .f textarea:focus {
-      outline: none; border-color: var(--negro); box-shadow: 0 0 0 3px rgba(17,19,24,.08);
-    }
+    .f label { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--texto); }
+    .f input, .f select, .f textarea { width: 100%; padding: 11px 14px; border: 1px solid var(--linea); border-radius: var(--radio); font-family: var(--sans); font-size: .9rem; color: var(--texto); background: var(--blanco); transition: border-color 150ms ease, box-shadow 150ms ease; appearance: none; -webkit-appearance: none; }
+    .f input:focus, .f select:focus, .f textarea:focus { outline: none; border-color: var(--negro); box-shadow: 0 0 0 3px rgba(13,13,13,.07); }
     .f textarea { resize: vertical; min-height: 100px; }
-
-    /* Checks legales */
     .legal-sep { border-top: 1px solid var(--linea); padding-top: 18px; display: flex; flex-direction: column; gap: 13px; }
     .fcheck { display: flex; align-items: flex-start; gap: 11px; }
     .fcheck input[type="checkbox"] { width: 16px; height: 16px; min-width: 16px; min-height: 16px; margin-top: 3px; cursor: pointer; accent-color: var(--negro); }
-    .fcheck label { font-size: .83rem; color: var(--texto); line-height: 1.55; cursor: pointer; }
-    .fcheck a { color: var(--navy); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
-    .fcheck a:hover { color: var(--negro); }
-    .msg-ok {
-      display: none; padding: 14px 18px;
-      background: #F0FDF4; border: 1px solid #BBF7D0;
-      border-radius: var(--radio); color: #166534; font-size: .88rem; font-weight: 600;
+    .fcheck label { font-size: .82rem; color: var(--texto); line-height: 1.55; cursor: pointer; }
+    .fcheck a { color: var(--negro); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+    .btn-submit {
+      width: 100%; padding: 14px; background: var(--negro); color: var(--blanco);
+      border: none; border-radius: var(--radio); cursor: pointer;
+      font-family: var(--sans); font-size: .84rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .1em;
+      transition: transform 150ms var(--ease-out), opacity 150ms ease;
     }
+    .btn-submit:hover  { opacity: .85; }
+    .btn-submit:active { transform: scale(0.97); }
+    .msg-ok { display: none; padding: 14px 18px; background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: var(--radio); color: #166534; font-size: .88rem; font-weight: 600; }
 
-    /* ════════════════ FOOTER ════════════════ */
-    .footer { background: var(--negro); color: rgba(255,255,255,.85); padding: 60px 0 36px; }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 52px; }
+    /* ═══════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════ */
+    .footer { background: var(--fondo); color: var(--texto); padding: 64px 0 36px; border-top: 1px solid var(--linea); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 56px; }
     @media (max-width: 760px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; } }
     @media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; } }
-    .footer-brand strong { display: block; font-family: var(--serif); font-size: 1.1rem; font-weight: 400; margin-bottom: 12px; color: #fff; }
-    .footer-brand p { font-size: .84rem; opacity: .55; line-height: 1.65; margin-bottom: 10px; }
-    .footer-col h4 { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .18em; color: rgba(255,255,255,.35); margin-bottom: 18px; }
+    .footer-brand strong { display: block; font-family: var(--serif); font-size: 1.1rem; font-weight: 400; font-style: italic; color: var(--negro); margin-bottom: 14px; }
+    .footer-brand p { font-size: .84rem; color: var(--muted); line-height: 1.65; }
+    .footer-col h4 { font-size: .66rem; font-weight: 700; text-transform: uppercase; letter-spacing: .2em; color: var(--negro); margin-bottom: 18px; }
     .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
-    .footer-col ul li a { font-size: .86rem; opacity: .65; transition: opacity 140ms ease; }
-    .footer-col ul li a:hover { opacity: 1; }
-    .footer-linea { border-top: 1px solid rgba(255,255,255,.1); padding-top: 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-    .footer-copy { font-size: .78rem; opacity: .4; }
+    .footer-col ul li a { font-size: .85rem; color: var(--muted); transition: color 140ms ease; }
+    .footer-col ul li a:hover { color: var(--negro); }
+    .footer-linea { border-top: 1px solid var(--linea); padding-top: 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-copy { font-size: .77rem; color: var(--muted); }
     .footer-legal { display: flex; gap: 20px; }
-    .footer-legal a { font-size: .78rem; opacity: .5; transition: opacity 140ms ease; }
-    .footer-legal a:hover { opacity: 1; }
+    .footer-legal a { font-size: .77rem; color: var(--muted); transition: color 140ms ease; }
+    .footer-legal a:hover { color: var(--negro); }
 
-    /* ════════════════ COOKIE BANNER ════════════════ */
-    .ck-banner {
-      position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-      background: var(--negro); color: rgba(255,255,255,.85);
-      border-top: 1px solid rgba(255,255,255,.1);
-      padding: 18px 24px;
-      display: flex; align-items: center; flex-wrap: wrap; gap: 16px;
-      justify-content: space-between;
-      transform: translateY(100%);
-      transition: transform 420ms var(--ease-dr);
-    }
+    /* ═══════════════════════════════════════════════════
+       COOKIE BANNER
+    ═══════════════════════════════════════════════════ */
+    .ck-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; background: var(--negro); border-top: 1px solid rgba(255,255,255,.08); padding: 18px 24px; display: flex; align-items: center; flex-wrap: wrap; gap: 16px; justify-content: space-between; transform: translateY(100%); transition: transform 450ms var(--ease-dr); }
     .ck-banner.on { transform: translateY(0); }
-    .ck-banner p { font-size: .86rem; flex: 1 1 280px; line-height: 1.55; opacity: .8; }
-    .ck-banner a { color: rgba(255,255,255,.8); text-decoration: underline; text-underline-offset: 2px; }
-    .ck-banner a:hover { color: #fff; }
-    .ck-btns { display: flex; gap: 10px; flex-wrap: wrap; }
-    .ck-si {
-      padding: 9px 20px; background: var(--blanco); color: var(--negro);
-      border: none; border-radius: var(--radio);
-      font-family: var(--sans); font-size: .86rem; font-weight: 600; cursor: pointer;
-      transition: transform 150ms var(--ease-out), opacity 140ms ease;
-    }
-    .ck-si:active  { transform: scale(0.97); }
-    .ck-no {
-      padding: 9px 20px; background: transparent; color: rgba(255,255,255,.65);
-      border: 1px solid rgba(255,255,255,.2); border-radius: var(--radio);
-      font-family: var(--sans); font-size: .86rem; font-weight: 600; cursor: pointer;
-      transition: border-color 140ms ease, color 140ms ease;
-    }
-    .ck-no:hover { border-color: rgba(255,255,255,.5); color: rgba(255,255,255,.85); }
+    .ck-banner p { font-size: .85rem; flex: 1 1 280px; opacity: .7; line-height: 1.55; }
+    .ck-banner a { color: rgba(255,255,255,.75); text-decoration: underline; text-underline-offset: 2px; }
+    .ck-btns { display: flex; gap: 10px; }
+    .ck-si { padding: 9px 20px; background: var(--blanco); color: var(--negro); border: none; border-radius: var(--radio); font-family: var(--sans); font-size: .84rem; font-weight: 700; cursor: pointer; transition: transform 150ms var(--ease-out), opacity 140ms ease; }
+    .ck-si:active { transform: scale(0.97); }
+    .ck-no { padding: 9px 20px; background: transparent; color: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.18); border-radius: var(--radio); font-family: var(--sans); font-size: .84rem; font-weight: 600; cursor: pointer; transition: all 140ms ease; }
+    .ck-no:hover { border-color: rgba(255,255,255,.45); color: rgba(255,255,255,.8); }
 
-    /* ════════════════ MODALES ════════════════ */
-    .modal-bg {
-      position: fixed; inset: 0; z-index: 200;
-      background: rgba(10,12,18,.72);
-      display: flex; align-items: flex-end; justify-content: center;
-      opacity: 0; pointer-events: none;
-      transition: opacity 240ms ease;
-    }
+    /* ═══════════════════════════════════════════════════
+       MODALES
+    ═══════════════════════════════════════════════════ */
+    .modal-bg { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,.8); display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 250ms ease; }
     .modal-bg.on { opacity: 1; pointer-events: all; }
-    .modal {
-      background: var(--blanco);
-      border-radius: var(--radio-g) var(--radio-g) 0 0;
-      width: 100%; max-width: 720px; max-height: 86vh;
-      overflow: hidden; display: flex; flex-direction: column;
-      transform: translateY(100%);
-      transition: transform 360ms var(--ease-dr);
-    }
+    .modal { background: var(--blanco); border-radius: 6px 6px 0 0; width: 100%; max-width: 740px; max-height: 86vh; overflow: hidden; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 380ms var(--ease-dr); }
     .modal-bg.on .modal { transform: translateY(0); }
-    .modal-top {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 28px 18px; border-bottom: 1px solid var(--linea); flex: 0 0 auto;
-    }
+    .modal-top { display: flex; align-items: center; justify-content: space-between; padding: 20px 28px 18px; border-bottom: 1px solid var(--linea); flex: 0 0 auto; }
     .modal-top h3 { font-weight: 700; font-size: .97rem; }
-    .modal-x {
-      width: 34px; height: 34px; border-radius: 50%;
-      background: var(--fondo); border: none; cursor: pointer;
-      display: grid; place-items: center; color: var(--muted);
-      font-size: .9rem; transition: background 140ms ease;
-    }
+    .modal-x { width: 34px; height: 34px; border-radius: 50%; background: var(--fondo); border: none; cursor: pointer; display: grid; place-items: center; color: var(--muted); font-size: .9rem; transition: background 140ms ease; }
     .modal-x:hover { background: var(--linea); }
     .modal-body { padding: 28px 28px 36px; overflow-y: auto; flex: 1 1 auto; }
-    .modal-body h4 { font-size: .92rem; font-weight: 700; margin: 22px 0 9px; color: var(--navy); }
-    .modal-body p  { font-size: .86rem; line-height: 1.74; margin-bottom: 11px; }
+    .modal-body h4 { font-size: .9rem; font-weight: 700; margin: 22px 0 9px; }
+    .modal-body p { font-size: .86rem; line-height: 1.74; margin-bottom: 11px; }
     .modal-body ul { padding-left: 18px; margin-bottom: 11px; }
     .modal-body ul li { font-size: .86rem; line-height: 1.74; margin-bottom: 5px; }
     .modal-ver { font-size: .72rem; color: var(--muted); border-top: 1px solid var(--linea); margin-top: 24px; padding-top: 14px; }
 
-    /* ════════════════ ADMIN PANEL ════════════════ */
+    /* ═══════════════════════════════════════════════════
+       ADMIN
+    ═══════════════════════════════════════════════════ */
     .admin-panel { display: none; position: fixed; inset: 0; z-index: 300; background: var(--blanco); overflow-y: auto; }
     .admin-panel.on { display: block; }
     .admin-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; background: var(--fondo); }
-    .admin-box { background: var(--blanco); padding: 44px 40px; border-radius: var(--radio-g); border: 1px solid var(--linea); box-shadow: var(--sombra); width: 100%; max-width: 380px; }
-    .admin-box h2 { font-family: var(--serif); font-weight: 400; font-size: 1.5rem; margin-bottom: 8px; }
+    .admin-box { background: var(--blanco); padding: 44px 40px; border-radius: 6px; border: 1px solid var(--linea); width: 100%; max-width: 380px; }
+    .admin-box h2 { font-family: var(--serif); font-weight: 400; font-style: italic; font-size: 1.6rem; margin-bottom: 8px; }
     .admin-box p  { font-size: .86rem; color: var(--muted); margin-bottom: 28px; }
     .admin-cont { padding: 0 24px 48px; max-width: 1180px; margin: 0 auto; }
-    .admin-top2 { display: flex; align-items: center; justify-content: space-between; padding: 20px 0 16px; border-bottom: 1px solid var(--linea); margin-bottom: 24px; gap: 12px; flex-wrap: wrap; }
-    .admin-top2 h2 { font-family: var(--serif); font-weight: 400; font-size: 1.4rem; }
+    .admin-top2 { display: flex; align-items: center; justify-content: space-between; padding: 20px 0 16px; border-bottom: 1px solid var(--linea); margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+    .admin-top2 h2 { font-family: var(--serif); font-weight: 400; font-style: italic; font-size: 1.5rem; }
     .admin-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--linea); margin-bottom: 24px; }
-    .a-tab { padding: 9px 18px; font-family: var(--sans); font-size: .86rem; font-weight: 600; cursor: pointer; background: none; border: none; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 140ms ease; }
+    .a-tab { padding: 9px 18px; font-family: var(--sans); font-size: .84rem; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; cursor: pointer; background: none; border: none; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 140ms ease; }
     .a-tab.on { color: var(--negro); border-color: var(--negro); }
-    .tbl-wrap { overflow-x: auto; border: 1px solid var(--linea); border-radius: var(--radio-g); }
+    .tbl-wrap { overflow-x: auto; border: 1px solid var(--linea); border-radius: var(--radio); }
     .tbl { width: 100%; border-collapse: collapse; font-size: .84rem; }
-    .tbl th { text-align: left; padding: 10px 14px; background: var(--fondo); font-size: .74rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); border-bottom: 1px solid var(--linea); white-space: nowrap; }
-    .tbl td { padding: 11px 14px; border-bottom: 1px solid var(--fondo); color: var(--texto); line-height: 1.4; }
+    .tbl th { text-align: left; padding: 10px 14px; background: var(--fondo); font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); border-bottom: 1px solid var(--linea); white-space: nowrap; }
+    .tbl td { padding: 11px 14px; border-bottom: 1px solid var(--fondo); line-height: 1.4; }
     .tbl tr:last-child td { border-bottom: none; }
     .tbl tr:hover td { background: var(--fondo); }
     .tbl-vacia { text-align: center; padding: 48px 20px; color: var(--muted); font-size: .88rem; }
     .badge { display: inline-block; padding: 2px 9px; border-radius: 2px; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; }
     .b-verde { background: #DCFCE7; color: #166534; }
     .b-gris  { background: var(--fondo); color: var(--muted); }
-    .admin-nota { font-size: .78rem; color: var(--muted); margin-top: 20px; padding: 12px 16px; background: var(--fondo); border-radius: var(--radio); border-left: 2px solid var(--oro); line-height: 1.65; }
+    .admin-nota { font-size: .78rem; color: var(--muted); margin-top: 20px; padding: 12px 16px; background: var(--fondo); border-radius: var(--radio); border-left: 2px solid var(--muted); line-height: 1.65; }
 
-    /* ════════════════ WA ════════════════ */
-    .wa-fab {
-      position: fixed; bottom: 24px; right: 24px; z-index: 50;
-      width: 52px; height: 52px; border-radius: 50%;
-      background: var(--wa); color: var(--blanco); border: none; cursor: pointer;
-      display: grid; place-items: center;
-      box-shadow: 0 4px 16px rgba(37,211,102,.35);
-      transition: transform 200ms var(--ease-out);
-      text-decoration: none;
-    }
-    .wa-fab:hover { transform: scale(1.08); }
+    /* ═══════════════════════════════════════════════════
+       BOTONES GENÉRICOS
+    ═══════════════════════════════════════════════════ */
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: var(--radio); font-family: var(--sans); font-size: .84rem; font-weight: 600; cursor: pointer; border: none; transition: transform 150ms var(--ease-out), opacity 150ms ease; text-decoration: none; }
+    .btn:active { transform: scale(0.97); }
+    .btn-negro  { background: var(--negro); color: var(--blanco); }
+    .btn-negro:hover { opacity: .85; }
+    .btn-linea  { background: transparent; color: var(--negro); border: 1px solid var(--linea); }
+    .btn-linea:hover { border-color: var(--negro); }
+    .btn-wa     { background: var(--wa); color: var(--blanco); }
+    .btn-wa:hover { opacity: .9; }
+
+    /* ═══════════════════════════════════════════════════
+       WA FLOTANTE
+    ═══════════════════════════════════════════════════ */
+    .wa-fab { position: fixed; bottom: 24px; right: 24px; z-index: 50; width: 52px; height: 52px; border-radius: 50%; background: var(--wa); color: var(--blanco); border: none; cursor: pointer; display: grid; place-items: center; box-shadow: 0 4px 16px rgba(37,211,102,.35); transition: transform 200ms var(--ease-out); text-decoration: none; }
+    .wa-fab:hover  { transform: scale(1.08); }
     .wa-fab:active { transform: scale(0.95); }
-
-    /* ════════════════ STAGGER CARDS (animación de entrada) ════════════════ */
-    .prod-grid .prod {
-      opacity: 0; transform: translateY(8px);
-      animation: fadeUp 280ms var(--ease-out) forwards;
-    }
-    .prod-grid .prod:nth-child(1) { animation-delay:   0ms; }
-    .prod-grid .prod:nth-child(2) { animation-delay:  40ms; }
-    .prod-grid .prod:nth-child(3) { animation-delay:  80ms; }
-    .prod-grid .prod:nth-child(4) { animation-delay: 120ms; }
-    .prod-grid .prod:nth-child(5) { animation-delay: 160ms; }
-    .prod-grid .prod:nth-child(6) { animation-delay: 200ms; }
-    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-
-    /* ════════════════ RESPONSIVE ════════════════ */
-    @media (max-width: 760px) {
-      .sec { padding: clamp(48px, 8vw, 72px) 0; }
-    }
   </style>
 </head>
 <body>
 
-<!-- ══════════════════════ COOKIE BANNER ══════════════════════ -->
-<div class="ck-banner" id="ckBanner" role="dialog" aria-label="Aviso de cookies">
-  <p>Usamos cookies propias y de análisis para mejorar el sitio. Puedes aceptarlas o limitarlas a las esenciales.
-     <a href="#" onclick="modal('cookies');return false;">Política de Cookies</a>
-  </p>
-  <div class="ck-btns">
-    <button class="ck-no" onclick="ckNo()">Solo esenciales</button>
-    <button class="ck-si" onclick="ckSi()">Aceptar todas</button>
+<!-- ══════════════════ MARQUEE ══════════════════════ -->
+<div class="mq-bar" aria-hidden="true">
+  <div class="mq-track">
+    <span class="mq-item">TEJI FACTORY</span><span class="mq-sep">·</span>
+    <span class="mq-item">UNIFORMES PARA TODOS</span><span class="mq-sep">·</span>
+    <span class="mq-item">REPÚBLICA DOMINICANA</span><span class="mq-sep">·</span>
+    <span class="mq-item">PRODUCCIÓN LOCAL</span><span class="mq-sep">·</span>
+    <span class="mq-item">DESDE 50 UNIDADES</span><span class="mq-sep">·</span>
+    <span class="mq-item">TU MARCA EN CADA PRENDA</span><span class="mq-sep">·</span>
+    <span class="mq-item">DISEÑO PROPIO</span><span class="mq-sep">·</span>
+    <span class="mq-item">CALIDAD PREMIUM</span><span class="mq-sep">·</span>
+    <!-- duplicado para loop seamless -->
+    <span class="mq-item">TEJI FACTORY</span><span class="mq-sep">·</span>
+    <span class="mq-item">UNIFORMES PARA TODOS</span><span class="mq-sep">·</span>
+    <span class="mq-item">REPÚBLICA DOMINICANA</span><span class="mq-sep">·</span>
+    <span class="mq-item">PRODUCCIÓN LOCAL</span><span class="mq-sep">·</span>
+    <span class="mq-item">DESDE 50 UNIDADES</span><span class="mq-sep">·</span>
+    <span class="mq-item">TU MARCA EN CADA PRENDA</span><span class="mq-sep">·</span>
+    <span class="mq-item">DISEÑO PROPIO</span><span class="mq-sep">·</span>
+    <span class="mq-item">CALIDAD PREMIUM</span><span class="mq-sep">·</span>
   </div>
 </div>
 
-<!-- ══════════════════════ HEADER ══════════════════════════════ -->
-<header class="hdr" id="inicio">
+<!-- ══════════════════ HEADER ═══════════════════════ -->
+<header class="hdr" id="hdr">
   <div class="c">
     <div class="hdr-row">
       <a href="#inicio" class="logo">
         <div class="logo-mark">TF</div>
-        <div class="logo-name"><em>Teji Factory</em></div>
+        <span class="logo-name">Teji Factory</span>
       </a>
       <nav class="nav" aria-label="Principal">
         <a href="#catalogo">Catálogo</a>
@@ -486,232 +522,148 @@
         <a href="#contacto">Contacto</a>
       </nav>
       <div class="hdr-cta">
-        <a href="#contacto" class="btn btn-negro">Cotizar</a>
+        <a href="#contacto" class="btn-hdr">Cotizar</a>
       </div>
     </div>
   </div>
 </header>
 
-<!-- ══════════════════════ HERO ═══════════════════════════════ -->
-<section class="hero">
-  <div class="c">
-    <div class="hero-inner">
-      <span class="rotulo">Teji Factory — Uniformes para Todos</span>
-      <h1>Tu equipo, vestido para representarte</h1>
-      <p>Fabricamos uniformes corporativos a la medida de tu empresa. Desde 50 unidades, con diseño propio y entrega en toda República Dominicana.</p>
-      <div class="hero-btns">
-        <a href="#contacto" class="btn btn-blanco">Solicitar cotización</a>
-        <a href="#catalogo" class="btn" style="color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.25);background:transparent;">Ver catálogo</a>
-      </div>
+<!-- ══════════════════ HERO ═════════════════════════ -->
+<section class="hero" id="inicio">
+  <div class="hero-inner">
+    <span class="hero-eyebrow">Santo Domingo, República Dominicana</span>
+    <h1>Tu equipo,<br>vestido para<br>representarte</h1>
+    <p class="hero-sub">Fabricamos uniformes corporativos a la medida. Desde 50 unidades, con diseño propio y tu marca bien puesta.</p>
+    <div class="hero-btns">
+      <a href="#contacto" class="btn-hero-p">Solicitar cotización</a>
+      <a href="#catalogo" class="btn-hero-s">Ver catálogo</a>
     </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true">
+    <div class="hero-scroll-line"></div>
+    scroll
   </div>
 </section>
 
-<!-- ══════════════════════ STATS ══════════════════════════════ -->
-<div class="stats">
+<!-- ══════════════════ STATS ════════════════════════ -->
+<div class="stats" id="stats">
   <div class="c" style="padding:0 24px;">
     <div class="stats-row">
-      <div class="stat"><div class="stat-num">+200</div><div class="stat-lbl">Empresas atendidas</div></div>
-      <div class="stat"><div class="stat-num">+50 K</div><div class="stat-lbl">Prendas fabricadas</div></div>
-      <div class="stat"><div class="stat-num">50</div><div class="stat-lbl">Unidades mínimo</div></div>
-      <div class="stat"><div class="stat-num">24 h</div><div class="stat-lbl">Respuesta cotización</div></div>
+      <div class="stat fi"><div class="stat-n">+200</div><div class="stat-l">Empresas atendidas</div></div>
+      <div class="stat fi fi-d1"><div class="stat-n">+50 K</div><div class="stat-l">Prendas fabricadas</div></div>
+      <div class="stat fi fi-d2"><div class="stat-n">50</div><div class="stat-l">Unidades mínimo</div></div>
+      <div class="stat fi fi-d3"><div class="stat-n">24 h</div><div class="stat-l">Respuesta cotización</div></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════ POR QUÉ ════════════════════════════ -->
+<!-- ══════════════════ NOSOTROS ═════════════════════ -->
 <section class="sec" id="nosotros">
   <div class="c">
-    <div class="sec-hdr">
-      <span class="rotulo">Por qué elegirnos</span>
-      <h2>Más que uniformes,<br>es imagen de empresa</h2>
-      <p>Cada prenda refuerza la identidad de tu organización y la confianza de quienes la llevan puesta.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;" class="fi">
+      <div>
+        <span class="rotulo">Por qué elegirnos</span>
+        <h2 class="sec-h">Más que uniformes,<br>es imagen de empresa</h2>
+        <p class="sec-p">Cada prenda refuerza la identidad de tu organización y la confianza de quienes la llevan puesta. No fabricamos ropa — fabricamos representación.</p>
+      </div>
+      <div></div>
     </div>
-    <div class="razones">
-      <div class="razon">
-        <div class="razon-ico">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
-            <path d="M20 4L8.12 15.88M14.47 14.48L20 20M8.12 8.12L12 12"/>
-          </svg>
+    <div style="margin-top:48px;">
+      <div class="razones">
+        <div class="razon fi">
+          <div class="razon-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.12 15.88M14.47 14.48L20 20M8.12 8.12L12 12"/></svg></div>
+          <h3>Diseño y confección propios</h3>
+          <p>Diseñamos y producimos bajo el mismo techo. Sin intermediarios, sin sorpresas en tiempos ni en acabados.</p>
         </div>
-        <h3>Diseño y confección propios</h3>
-        <p>Diseñamos y producimos bajo el mismo techo. Sin intermediarios, sin sorpresas en tiempos ni en acabados.</p>
-      </div>
-      <div class="razon">
-        <div class="razon-ico">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-            <polyline points="2 17 12 22 22 17"/>
-            <polyline points="2 12 12 17 22 12"/>
-          </svg>
+        <div class="razon fi fi-d1">
+          <div class="razon-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+          <h3>Tu marca, bien puesta</h3>
+          <p>Bordado, serigrafía, sublimación. Aplicamos tu logo con la técnica que mejor queda en cada tela y cada corte.</p>
         </div>
-        <h3>Tu marca, bien puesta</h3>
-        <p>Bordado, serigrafía, sublimación. Aplicamos tu logo con la técnica que mejor queda en cada tela y cada corte.</p>
-      </div>
-      <div class="razon">
-        <div class="razon-ico">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
-          </svg>
+        <div class="razon fi fi-d2">
+          <div class="razon-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+          <h3>Desde 50 unidades</h3>
+          <p>Atendemos empresas medianas y grandes. Mínimo razonable, calidad sin sacrificar el volumen de tu pedido.</p>
         </div>
-        <h3>Desde 50 unidades</h3>
-        <p>Atendemos empresas medianas y grandes. Mínimo razonable, calidad sin sacrificar el volumen de tu pedido.</p>
-      </div>
-      <div class="razon">
-        <div class="razon-ico">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
+        <div class="razon fi fi-d3">
+          <div class="razon-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <h3>Entrega en toda la isla</h3>
+          <p>Despachamos a Santo Domingo, Santiago y todas las provincias. Coordinamos la logística por ti.</p>
         </div>
-        <h3>Entrega en toda la isla</h3>
-        <p>Despachamos a Santo Domingo, Santiago y todas las provincias. Coordinamos la logística por ti.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════ CATÁLOGO ═══════════════════════════ -->
+<!-- ══════════════════ CATÁLOGO ═════════════════════ -->
 <section class="sec catalogo-bg" id="catalogo">
   <div class="c">
-    <div class="sec-hdr">
-      <span class="rotulo">Catálogo de prendas</span>
-      <h2>Encuentra el uniforme<br>para tu empresa</h2>
-      <p>Chaquetas, camisas, polos, pantalones y más — todos personalizables con tu marca.</p>
-    </div>
-    <div class="cats" role="group" aria-label="Filtrar">
-      <button class="cat on"  data-c="todos"      onclick="filtrar(this)">Todos</button>
-      <button class="cat"     data-c="chaquetas"  onclick="filtrar(this)">Chaquetas</button>
-      <button class="cat"     data-c="camisas"    onclick="filtrar(this)">Camisas</button>
-      <button class="cat"     data-c="polos"      onclick="filtrar(this)">Polos</button>
-      <button class="cat"     data-c="pantalones" onclick="filtrar(this)">Pantalones</button>
-      <button class="cat"     data-c="accesorios" onclick="filtrar(this)">Accesorios</button>
+    <div class="fi" style="margin-bottom:40px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:24px;">
+      <div>
+        <span class="rotulo">Catálogo de prendas</span>
+        <h2 class="sec-h" style="margin-bottom:0;">Encuentra el uniforme<br>para tu empresa</h2>
+      </div>
+      <div class="cats">
+        <button class="cat on"  data-c="todos"      onclick="filtrar(this)">Todos</button>
+        <button class="cat"     data-c="chaquetas"  onclick="filtrar(this)">Chaquetas</button>
+        <button class="cat"     data-c="camisas"    onclick="filtrar(this)">Camisas</button>
+        <button class="cat"     data-c="polos"      onclick="filtrar(this)">Polos</button>
+        <button class="cat"     data-c="pantalones" onclick="filtrar(this)">Pantalones</button>
+        <button class="cat"     data-c="accesorios" onclick="filtrar(this)">Accesorios</button>
+      </div>
     </div>
     <div class="prod-grid" id="pgrid">
-      <div class="prod" data-c="chaquetas">
-        <div class="prod-img"><span class="prod-cat-tag">Chaquetas</span></div>
-        <div class="prod-body"><div class="prod-num">TF-001</div><div class="prod-nom">Chaqueta Corporativa Slim</div><div class="prod-desc">Corte entallado, tela técnica, interior forrado. Ideal para cuerpos de ventas y ejecutivos.</div></div>
-        <div class="prod-pie"><button class="btn-cot" onclick="cotizar('Chaqueta Corporativa Slim')">Solicitar cotización</button></div>
-      </div>
-      <div class="prod" data-c="camisas">
-        <div class="prod-img"><span class="prod-cat-tag">Camisas</span></div>
-        <div class="prod-body"><div class="prod-num">TF-002</div><div class="prod-nom">Camisa Institucional</div><div class="prod-desc">Oxford 100% algodón, manga corta y larga. Bordado en pecho y brazo disponible.</div></div>
-        <div class="prod-pie"><button class="btn-cot" onclick="cotizar('Camisa Institucional')">Solicitar cotización</button></div>
-      </div>
-      <div class="prod" data-c="polos">
-        <div class="prod-img"><span class="prod-cat-tag">Polos</span></div>
-        <div class="prod-body"><div class="prod-num">TF-003</div><div class="prod-nom">Polo Piqué Corporativo</div><div class="prod-desc">Piqué 220 g, resistente al lavado industrial. Disponible en más de 30 colores.</div></div>
-        <div class="prod-pie"><button class="btn-cot" onclick="cotizar('Polo Piqué Corporativo')">Solicitar cotización</button></div>
-      </div>
-      <div class="prod" data-c="pantalones">
-        <div class="prod-img"><span class="prod-cat-tag">Pantalones</span></div>
-        <div class="prod-body"><div class="prod-num">TF-004</div><div class="prod-nom">Pantalón Stretch Formal</div><div class="prod-desc">Gabardina stretch 4 vías. Cómodo, resistente y con corte formal para uso diario.</div></div>
-        <div class="prod-pie"><button class="btn-cot" onclick="cotizar('Pantalón Stretch Formal')">Solicitar cotización</button></div>
-      </div>
-      <div class="prod" data-c="chaquetas">
-        <div class="prod-img"><span class="prod-cat-tag">Chaquetas</span></div>
-        <div class="prod-body"><div class="prod-num">TF-005</div><div class="prod-nom">Chaqueta Industrial Safety</div><div class="prod-desc">Alta visibilidad, cintas reflectivas. Cumple normas de seguridad industrial.</div></div>
-        <div class="prod-pie"><button class="btn-cot" onclick="cotizar('Chaqueta Industrial Safety')">Solicitar cotización</button></div>
-      </div>
-      <div class="prod" data-c="accesorios">
-        <div class="prod-img"><span class="prod-cat-tag">Accesorios</span></div>
-        <div class="prod-body"><div class="prod-num">TF-006</div><div class="prod-nom">Gorra Corporativa</div><div class="prod-desc">Sarga 100% algodón, visera curva. Bordado estructurado en frente con tu logo.</div></div>
-        <div class="prod-pie"><button class="btn-cot" onclick="cotizar('Gorra Corporativa')">Solicitar cotización</button></div>
-      </div>
+      <div class="prod fi"        data-c="chaquetas"><div class="prod-img"><div class="prod-img-inner"><span class="prod-sku">TF-001</span><span class="prod-cat-pill">Chaquetas</span></div></div><div class="prod-body"><div class="prod-nom">Chaqueta Corporativa Slim</div><div class="prod-desc">Corte entallado, tela técnica, interior forrado. Para cuerpos de ventas y ejecutivos.</div></div><div class="prod-pie"><button class="btn-cot" onclick="cotizar('Chaqueta Corporativa Slim')">Solicitar cotización</button></div></div>
+      <div class="prod fi fi-d1"  data-c="camisas"><div class="prod-img"><div class="prod-img-inner"><span class="prod-sku">TF-002</span><span class="prod-cat-pill">Camisas</span></div></div><div class="prod-body"><div class="prod-nom">Camisa Institucional</div><div class="prod-desc">Oxford 100% algodón, manga corta y larga. Bordado en pecho y brazo disponible.</div></div><div class="prod-pie"><button class="btn-cot" onclick="cotizar('Camisa Institucional')">Solicitar cotización</button></div></div>
+      <div class="prod fi fi-d2"  data-c="polos"><div class="prod-img"><div class="prod-img-inner"><span class="prod-sku">TF-003</span><span class="prod-cat-pill">Polos</span></div></div><div class="prod-body"><div class="prod-nom">Polo Piqué Corporativo</div><div class="prod-desc">Piqué 220 g, resistente al lavado industrial. Disponible en más de 30 colores.</div></div><div class="prod-pie"><button class="btn-cot" onclick="cotizar('Polo Piqué Corporativo')">Solicitar cotización</button></div></div>
+      <div class="prod fi fi-d3"  data-c="pantalones"><div class="prod-img"><div class="prod-img-inner"><span class="prod-sku">TF-004</span><span class="prod-cat-pill">Pantalones</span></div></div><div class="prod-body"><div class="prod-nom">Pantalón Stretch Formal</div><div class="prod-desc">Gabardina stretch 4 vías. Cómodo, resistente y con corte formal para uso diario.</div></div><div class="prod-pie"><button class="btn-cot" onclick="cotizar('Pantalón Stretch Formal')">Solicitar cotización</button></div></div>
+      <div class="prod fi fi-d1"  data-c="chaquetas"><div class="prod-img"><div class="prod-img-inner"><span class="prod-sku">TF-005</span><span class="prod-cat-pill">Chaquetas</span></div></div><div class="prod-body"><div class="prod-nom">Chaqueta Industrial Safety</div><div class="prod-desc">Alta visibilidad, cintas reflectivas. Cumple normas de seguridad industrial.</div></div><div class="prod-pie"><button class="btn-cot" onclick="cotizar('Chaqueta Industrial Safety')">Solicitar cotización</button></div></div>
+      <div class="prod fi fi-d2"  data-c="accesorios"><div class="prod-img"><div class="prod-img-inner"><span class="prod-sku">TF-006</span><span class="prod-cat-pill">Accesorios</span></div></div><div class="prod-body"><div class="prod-nom">Gorra Corporativa</div><div class="prod-desc">Sarga 100% algodón, visera curva. Bordado estructurado en frente con tu logo.</div></div><div class="prod-pie"><button class="btn-cot" onclick="cotizar('Gorra Corporativa')">Solicitar cotización</button></div></div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════ PROCESO ════════════════════════════ -->
+<!-- ══════════════════ PROCESO ══════════════════════ -->
 <section class="sec" id="proceso">
   <div class="c">
-    <div class="sec-hdr">
+    <div class="fi" style="margin-bottom:64px;">
       <span class="rotulo">Cómo trabajamos</span>
-      <h2>Tu pedido, paso a paso</h2>
-      <p>Desde la cotización hasta la entrega, acompañamos cada etapa.</p>
+      <h2 class="sec-h">Tu pedido,<br>paso a paso</h2>
     </div>
     <div class="proceso-grid">
-      <div class="paso"><div class="paso-num-txt">01</div><h3>Cotización</h3><p>Llena el formulario o escríbenos por WhatsApp. Respondemos con una propuesta en menos de 24 horas.</p></div>
-      <div class="paso"><div class="paso-num-txt">02</div><h3>Muestra digital</h3><p>Enviamos arte digital con tu logo sobre la prenda para que apruebes el diseño antes de producir.</p></div>
-      <div class="paso"><div class="paso-num-txt">03</div><h3>Confirmación de tallas</h3><p>Enviamos una muestra física del lote para que valides el corte y la talla antes de la producción completa.</p></div>
-      <div class="paso"><div class="paso-num-txt">04</div><h3>Producción y entrega</h3><p>Producimos y entregamos en el plazo acordado, con tu empresa en cada prenda.</p></div>
+      <div class="paso fi">   <div class="paso-n">01</div><h3>Cotización</h3><p>Llena el formulario o escríbenos. Respondemos con una propuesta en menos de 24 horas.</p></div>
+      <div class="paso fi fi-d1"><div class="paso-n">02</div><h3>Muestra digital</h3><p>Enviamos arte digital con tu logo sobre la prenda para que apruebes el diseño antes de producir.</p></div>
+      <div class="paso fi fi-d2"><div class="paso-n">03</div><h3>Confirmación de tallas</h3><p>Enviamos una muestra física del lote para que valides el corte y la talla.</p></div>
+      <div class="paso fi fi-d3"><div class="paso-n">04</div><h3>Producción y entrega</h3><p>Producimos y entregamos en el plazo acordado, con tu empresa en cada prenda.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════ CONTACTO ══════════════════════════ -->
+<!-- ══════════════════ CONTACTO ═════════════════════ -->
 <section class="sec contacto-bg" id="contacto">
   <div class="c">
     <div class="contacto-layout">
-      <div class="contacto-info">
-        <div class="sec-hdr" style="margin-bottom:36px;">
-          <span class="rotulo">Hablemos</span>
-          <h2>Solicita tu cotización</h2>
-          <p>Cuéntanos qué necesitas y te respondemos con una propuesta personalizada en menos de 24 horas.</p>
-        </div>
-        <div class="info-fila">
-          <div class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-          <div class="info-txt"><strong>Ubicación</strong><span>Santo Domingo, República Dominicana</span></div>
-        </div>
-        <div class="info-fila">
-          <div class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
-          <div class="info-txt"><strong>Correo</strong><span>info@tejifactory.com</span></div>
-        </div>
-        <div class="info-fila">
-          <div class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.86 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.77 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
-          <div class="info-txt"><strong>WhatsApp</strong><span>+1 (809) 000-0000</span></div>
-        </div>
-        <div class="info-fila">
-          <div class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
-          <div class="info-txt"><strong>RNC</strong><span>[Número de RNC]</span></div>
-        </div>
-        <div style="margin-top:28px;">
-          <a href="https://wa.me/18090000000" class="btn btn-wa" target="_blank" rel="noopener">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.14.563 4.148 1.549 5.886L0 24l6.302-1.526A11.934 11.934 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 01-5.001-1.372l-.359-.214-3.72.976.994-3.636-.234-.373A9.78 9.78 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
-            Escribir por WhatsApp
-          </a>
-        </div>
+      <div class="fi">
+        <span class="rotulo">Hablemos</span>
+        <h2 class="sec-h">Solicita<br>tu cotización</h2>
+        <p class="sec-p" style="margin-bottom:36px;">Cuéntanos qué necesitas y te respondemos con una propuesta personalizada en menos de 24 horas.</p>
+        <div class="info-row"><div class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="info-txt"><strong>Ubicación</strong><span>Santo Domingo, República Dominicana</span></div></div>
+        <div class="info-row"><div class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div class="info-txt"><strong>Correo</strong><span>info@tejifactory.com</span></div></div>
+        <div class="info-row"><div class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.86 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.77 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div class="info-txt"><strong>WhatsApp</strong><span>+1 (809) 000-0000</span></div></div>
+        <div class="info-row"><div class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div><div class="info-txt"><strong>RNC</strong><span>[Número de RNC]</span></div></div>
+        <div style="margin-top:28px;"><a href="https://wa.me/18090000000" class="btn btn-wa" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.14.563 4.148 1.549 5.886L0 24l6.302-1.526A11.934 11.934 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 01-5.001-1.372l-.359-.214-3.72.976.994-3.636-.234-.373A9.78 9.78 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>Escribir por WhatsApp</a></div>
       </div>
-
-      <div>
+      <div class="fi fi-d1">
         <form class="form" id="fContacto" onsubmit="enviar(event)">
-          <div class="f-par">
-            <div class="f"><label for="nom">Nombre *</label><input type="text" id="nom" name="nom" placeholder="Tu nombre" required></div>
-            <div class="f"><label for="emp">Empresa *</label><input type="text" id="emp" name="emp" placeholder="Nombre de la empresa" required></div>
-          </div>
-          <div class="f-par">
-            <div class="f"><label for="eml">Correo electrónico *</label><input type="email" id="eml" name="eml" placeholder="tu@empresa.com" required></div>
-            <div class="f"><label for="tel">Teléfono</label><input type="tel" id="tel" name="tel" placeholder="+1 (809)"></div>
-          </div>
-          <div class="f">
-            <label for="cant">Cantidad aproximada</label>
-            <select id="cant" name="cant">
-              <option value="">Seleccionar...</option>
-              <option value="50-100">50 – 100 prendas</option>
-              <option value="101-300">101 – 300 prendas</option>
-              <option value="301-1000">301 – 1,000 prendas</option>
-              <option value="1000+">Más de 1,000 prendas</option>
-            </select>
-          </div>
-          <div class="f">
-            <label for="msg">¿Qué necesitas? *</label>
-            <textarea id="msg" name="msg" placeholder="Describe brevemente el tipo de prenda, colores, logo, etc." required></textarea>
-          </div>
+          <div class="f-par"><div class="f"><label for="nom">Nombre *</label><input type="text" id="nom" name="nom" placeholder="Tu nombre" required></div><div class="f"><label for="emp">Empresa *</label><input type="text" id="emp" name="emp" placeholder="Nombre de la empresa" required></div></div>
+          <div class="f-par"><div class="f"><label for="eml">Correo electrónico *</label><input type="email" id="eml" name="eml" placeholder="tu@empresa.com" required></div><div class="f"><label for="tel">Teléfono</label><input type="tel" id="tel" name="tel" placeholder="+1 (809)"></div></div>
+          <div class="f"><label for="cant">Cantidad aproximada</label><select id="cant" name="cant"><option value="">Seleccionar...</option><option value="50-100">50 – 100 prendas</option><option value="101-300">101 – 300 prendas</option><option value="301-1000">301 – 1,000 prendas</option><option value="1000+">Más de 1,000 prendas</option></select></div>
+          <div class="f"><label for="msg">¿Qué necesitas? *</label><textarea id="msg" name="msg" placeholder="Tipo de prenda, colores, logo, cantidad, etc." required></textarea></div>
           <div class="legal-sep">
-            <div class="fcheck">
-              <input type="checkbox" id="ckTC" name="ckTC" required>
-              <label for="ckTC">He leído y acepto los <a href="#" onclick="modal('terminos');return false;">Términos y Condiciones</a> de Teji Factory. *</label>
-            </div>
-            <div class="fcheck">
-              <input type="checkbox" id="ckPr" name="ckPr" required>
-              <label for="ckPr">He leído y acepto la <a href="#" onclick="modal('privacidad');return false;">Política de Privacidad</a> y autorizo el tratamiento de mis datos conforme a la Ley No. 172-13 de República Dominicana. *</label>
-            </div>
+            <div class="fcheck"><input type="checkbox" id="ckTC" name="ckTC" required><label for="ckTC">He leído y acepto los <a href="#" onclick="modal('terminos');return false;">Términos y Condiciones</a> de Teji Factory. *</label></div>
+            <div class="fcheck"><input type="checkbox" id="ckPr" name="ckPr" required><label for="ckPr">He leído y acepto la <a href="#" onclick="modal('privacidad');return false;">Política de Privacidad</a> y autorizo el tratamiento de mis datos conforme a la Ley No. 172-13 de República Dominicana. *</label></div>
           </div>
-          <button type="submit" class="btn btn-negro" style="width:100%;justify-content:center;padding:14px;">
-            Enviar cotización
-          </button>
+          <button type="submit" class="btn-submit">Enviar cotización</button>
           <div class="msg-ok" id="msgOk" role="status">Mensaje enviado — te respondemos en menos de 24 horas.</div>
         </form>
       </div>
@@ -719,250 +671,95 @@
   </div>
 </section>
 
-<!-- ══════════════════════ FOOTER ════════════════════════════ -->
+<!-- ══════════════════ FOOTER ═══════════════════════ -->
 <footer class="footer">
   <div class="c">
     <div class="footer-grid">
-      <div class="footer-brand">
-        <strong>Teji Factory</strong>
-        <p>Fabricación y dotación de uniformes corporativos en República Dominicana. Uniformes para Todos.</p>
-        <div style="font-size:.78rem;opacity:.35;margin-top:8px;">RNC: [Número de RNC] · Santo Domingo, RD</div>
-        <div style="font-size:.78rem;opacity:.35;margin-top:3px;">Canal de datos: datos@tejifactory.com</div>
-      </div>
-      <div class="footer-col">
-        <h4>Catálogo</h4>
-        <ul>
-          <li><a href="#catalogo">Chaquetas</a></li>
-          <li><a href="#catalogo">Camisas</a></li>
-          <li><a href="#catalogo">Polos</a></li>
-          <li><a href="#catalogo">Pantalones</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Empresa</h4>
-        <ul>
-          <li><a href="#nosotros">Nosotros</a></li>
-          <li><a href="#proceso">Proceso</a></li>
-          <li><a href="#contacto">Contacto</a></li>
-          <li><a href="#" onclick="abrirAdmin();return false;">Área privada</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Legal</h4>
-        <ul>
-          <li><a href="#" onclick="modal('terminos');return false;">Términos y Condiciones</a></li>
-          <li><a href="#" onclick="modal('privacidad');return false;">Política de Privacidad</a></li>
-          <li><a href="#" onclick="modal('cookies');return false;">Política de Cookies</a></li>
-          <li><a href="mailto:datos@tejifactory.com">Canal ARCO</a></li>
-        </ul>
-      </div>
+      <div class="footer-brand"><strong>Teji Factory</strong><p>Fabricación y dotación de uniformes corporativos en República Dominicana. Uniformes para Todos.</p><div style="font-size:.77rem;color:var(--muted);margin-top:10px;">RNC: [Número de RNC] · Santo Domingo, RD<br>Canal de datos: datos@tejifactory.com</div></div>
+      <div class="footer-col"><h4>Catálogo</h4><ul><li><a href="#catalogo">Chaquetas</a></li><li><a href="#catalogo">Camisas</a></li><li><a href="#catalogo">Polos</a></li><li><a href="#catalogo">Pantalones</a></li></ul></div>
+      <div class="footer-col"><h4>Empresa</h4><ul><li><a href="#nosotros">Nosotros</a></li><li><a href="#proceso">Proceso</a></li><li><a href="#contacto">Contacto</a></li><li><a href="#" onclick="abrirAdmin();return false;">Área privada</a></li></ul></div>
+      <div class="footer-col"><h4>Legal</h4><ul><li><a href="#" onclick="modal('terminos');return false;">Términos y Condiciones</a></li><li><a href="#" onclick="modal('privacidad');return false;">Política de Privacidad</a></li><li><a href="#" onclick="modal('cookies');return false;">Política de Cookies</a></li><li><a href="mailto:datos@tejifactory.com">Canal ARCO</a></li></ul></div>
     </div>
-    <div class="footer-linea">
-      <div class="footer-copy">© 2026 Teji Factory. Todos los derechos reservados. Santo Domingo, República Dominicana.</div>
-      <div class="footer-legal">
-        <a href="#" onclick="modal('privacidad');return false;">Privacidad</a>
-        <a href="#" onclick="modal('terminos');return false;">Términos</a>
-        <a href="#" onclick="modal('cookies');return false;">Cookies</a>
-      </div>
-    </div>
+    <div class="footer-linea"><div class="footer-copy">© 2026 Teji Factory. Todos los derechos reservados. Santo Domingo, República Dominicana.</div><div class="footer-legal"><a href="#" onclick="modal('privacidad');return false;">Privacidad</a><a href="#" onclick="modal('terminos');return false;">Términos</a><a href="#" onclick="modal('cookies');return false;">Cookies</a></div></div>
   </div>
 </footer>
 
-<!-- ══════════════════════ WA FLOTANTE ═══════════════════════ -->
-<a href="https://wa.me/18090000000" class="wa-fab" aria-label="WhatsApp" target="_blank" rel="noopener">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.14.563 4.148 1.549 5.886L0 24l6.302-1.526A11.934 11.934 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 01-5.001-1.372l-.359-.214-3.72.976.994-3.636-.234-.373A9.78 9.78 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
-</a>
+<!-- WA -->
+<a href="https://wa.me/18090000000" class="wa-fab" aria-label="WhatsApp" target="_blank" rel="noopener"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.14.563 4.148 1.549 5.886L0 24l6.302-1.526A11.934 11.934 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.797 9.797 0 01-5.001-1.372l-.359-.214-3.72.976.994-3.636-.234-.373A9.78 9.78 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg></a>
 
-<!-- ══════════════════════ MODALES LEGALES ════════════════════ -->
+<!-- COOKIE BANNER -->
+<div class="ck-banner" id="ckBanner" role="dialog" aria-label="Aviso de cookies"><p>Usamos cookies propias y de análisis. <a href="#" onclick="modal('cookies');return false;">Política de Cookies</a></p><div class="ck-btns"><button class="ck-no" onclick="ckNo()">Solo esenciales</button><button class="ck-si" onclick="ckSi()">Aceptar</button></div></div>
 
-<!-- TÉRMINOS -->
-<div class="modal-bg" id="mTC" role="dialog" aria-modal="true" aria-labelledby="lblTC" onclick="bgClose(event,this)">
-  <div class="modal">
-    <div class="modal-top"><h3 id="lblTC">Términos y Condiciones</h3><button class="modal-x" onclick="cerrar('terminos')" aria-label="Cerrar">✕</button></div>
-    <div class="modal-body">
-      <h4>1. Identificación del prestador</h4>
-      <p><strong>Teji Factory – Uniformes para Todos</strong>, con RNC [NÚMERO], domiciliada en Santo Domingo, República Dominicana. Correo: info@tejifactory.com.</p>
-      <h4>2. Objeto</h4>
-      <p>Estos Términos regulan el acceso, la navegación y la contratación de servicios de fabricación y dotación de uniformes a través de tejifactory.com, conforme a la Ley No. 126-02 sobre Comercio Electrónico de la República Dominicana.</p>
-      <h4>3. Proceso de contratación</h4>
-      <p>La solicitud de cotización no constituye contrato de compraventa. El contrato se perfecciona cuando Teji Factory emite una cotización formal y el cliente la acepta por escrito.</p>
-      <h4>4. Precios y facturación</h4>
-      <p>Los precios se expresan en pesos dominicanos (RD$) e incluyen los impuestos aplicables. Las cotizaciones tienen vigencia de 15 días calendario desde su emisión.</p>
-      <h4>5. Plazos de producción y entrega</h4>
-      <p>Los plazos se confirman al aprobar el pedido. Teji Factory no responde por retrasos ocasionados por causas de fuerza mayor.</p>
-      <h4>6. Devoluciones y reclamaciones</h4>
-      <p>Las prendas fabricadas a medida no admiten devolución salvo defecto de fabricación comprobado. Reclamaciones dentro de los 7 días hábiles siguientes a la recepción, conforme a la Ley No. 358-05 de Protección al Consumidor.</p>
-      <h4>7. Propiedad intelectual</h4>
-      <p>Al enviarnos su logo e identidad visual, el cliente declara ser titular o tener autorización de uso de dichos elementos, eximiendo a Teji Factory de responsabilidad ante derechos de terceros.</p>
-      <h4>8. Legislación aplicable</h4>
-      <p>Estos Términos se rigen por la legislación dominicana. Controversias ante los tribunales competentes de Santo Domingo, D.N.</p>
-      <div class="modal-ver">Versión 1.0 — Vigente desde enero 2026 · Ley 126-02 RD</div>
-    </div>
-  </div>
-</div>
+<!-- MODALES LEGALES -->
+<div class="modal-bg" id="mTC" role="dialog" aria-modal="true" onclick="bgClose(event,this)"><div class="modal"><div class="modal-top"><h3>Términos y Condiciones</h3><button class="modal-x" onclick="cerrar('terminos')">✕</button></div><div class="modal-body"><h4>1. Identificación del prestador</h4><p><strong>Teji Factory – Uniformes para Todos</strong>, con RNC [NÚMERO], domiciliada en Santo Domingo, República Dominicana. Correo: info@tejifactory.com.</p><h4>2. Objeto</h4><p>Estos Términos regulan el acceso, la navegación y la contratación de servicios de fabricación y dotación de uniformes a través de tejifactory.com, conforme a la Ley No. 126-02 sobre Comercio Electrónico de la República Dominicana.</p><h4>3. Proceso de contratación</h4><p>La solicitud de cotización no constituye contrato de compraventa. El contrato se perfecciona cuando Teji Factory emite una cotización formal y el cliente la acepta por escrito.</p><h4>4. Precios y facturación</h4><p>Los precios se expresan en pesos dominicanos (RD$) e incluyen los impuestos aplicables. Las cotizaciones tienen vigencia de 15 días calendario.</p><h4>5. Plazos de producción y entrega</h4><p>Los plazos se confirman al aprobar el pedido. Teji Factory no responde por retrasos por causas de fuerza mayor.</p><h4>6. Devoluciones y reclamaciones</h4><p>Las prendas fabricadas a medida no admiten devolución salvo defecto de fabricación comprobado. Reclamaciones dentro de los 7 días hábiles siguientes a la recepción, conforme a la Ley No. 358-05.</p><h4>7. Propiedad intelectual</h4><p>Al enviarnos su logo, el cliente declara ser titular o tener autorización de uso, eximiendo a Teji Factory de responsabilidad ante derechos de terceros.</p><h4>8. Legislación aplicable</h4><p>Ley dominicana. Controversias ante los tribunales competentes de Santo Domingo, D.N.</p><div class="modal-ver">Versión 1.0 — Vigente desde enero 2026 · Ley 126-02 RD</div></div></div></div>
 
-<!-- PRIVACIDAD -->
-<div class="modal-bg" id="mPr" role="dialog" aria-modal="true" aria-labelledby="lblPr" onclick="bgClose(event,this)">
-  <div class="modal">
-    <div class="modal-top"><h3 id="lblPr">Política de Privacidad</h3><button class="modal-x" onclick="cerrar('privacidad')" aria-label="Cerrar">✕</button></div>
-    <div class="modal-body">
-      <p>En cumplimiento de la <strong>Ley No. 172-13 sobre Protección de Datos Personales de la República Dominicana</strong>, Teji Factory informa sobre el tratamiento de los datos personales recogidos a través de este sitio web.</p>
-      <h4>1. Responsable del tratamiento</h4>
-      <p><strong>Teji Factory – Uniformes para Todos</strong><br>RNC: [NÚMERO] · Santo Domingo, República Dominicana<br>Canal de datos: <strong>datos@tejifactory.com</strong></p>
-      <h4>2. Datos que recogemos</h4>
-      <ul>
-        <li>Nombre y apellidos</li>
-        <li>Razón social y nombre de la empresa</li>
-        <li>Correo electrónico y número de teléfono</li>
-        <li>Información sobre la solicitud de cotización</li>
-        <li>Dirección IP y datos técnicos de navegación</li>
-      </ul>
-      <h4>3. Finalidad del tratamiento</h4>
-      <ul>
-        <li>Gestionar solicitudes de cotización y prestación del servicio</li>
-        <li>Comunicaciones relacionadas con el pedido y la atención al cliente</li>
-        <li>Cumplimiento de obligaciones legales y fiscales dominicanas</li>
-        <li>Mejora de servicios y analítica de uso del sitio</li>
-      </ul>
-      <h4>4. Base legal</h4>
-      <p>El tratamiento se basa en el consentimiento expreso del interesado (Art. 7, Ley 172-13) y en la ejecución del contrato de servicios.</p>
-      <h4>5. Conservación de datos</h4>
-      <p>Los datos se conservarán durante el período necesario para la prestación del servicio y el tiempo exigido por las obligaciones legales y tributarias aplicables (mínimo 5 años).</p>
-      <h4>6. Destinatarios</h4>
-      <p>Los datos no se cederán a terceros salvo obligación legal. Se podrán compartir con proveedores tecnológicos bajo contratos de confidencialidad. Si el servidor se ubica fuera de RD, existe transferencia internacional de datos.</p>
-      <h4>7. Derechos ARCO</h4>
-      <p>Puede ejercer sus derechos de <strong>Acceso, Rectificación, Cancelación y Oposición</strong> escribiendo a <strong>datos@tejifactory.com</strong>. Atendemos en un plazo máximo de 15 días hábiles.</p>
-      <h4>8. Seguridad</h4>
-      <p>Este sitio usa HTTPS. Implementamos medidas técnicas y organizativas para proteger sus datos contra accesos no autorizados, conforme al Art. 10 de la Ley 172-13.</p>
-      <div class="modal-ver">Versión 1.0 — Vigente desde enero 2026 · Ley 172-13 RD</div>
-    </div>
-  </div>
-</div>
+<div class="modal-bg" id="mPr" role="dialog" aria-modal="true" onclick="bgClose(event,this)"><div class="modal"><div class="modal-top"><h3>Política de Privacidad</h3><button class="modal-x" onclick="cerrar('privacidad')">✕</button></div><div class="modal-body"><p>En cumplimiento de la <strong>Ley No. 172-13 sobre Protección de Datos Personales de la República Dominicana</strong>.</p><h4>1. Responsable del tratamiento</h4><p><strong>Teji Factory – Uniformes para Todos</strong> · RNC [NÚMERO] · Santo Domingo, RD · datos@tejifactory.com</p><h4>2. Datos que recogemos</h4><ul><li>Nombre y apellidos</li><li>Razón social y nombre de la empresa</li><li>Correo electrónico y teléfono</li><li>Información sobre la solicitud de cotización</li><li>Dirección IP y datos técnicos de navegación</li></ul><h4>3. Finalidad del tratamiento</h4><ul><li>Gestionar solicitudes de cotización y prestación del servicio</li><li>Comunicaciones relacionadas con el pedido</li><li>Cumplimiento de obligaciones legales y fiscales dominicanas</li></ul><h4>4. Base legal</h4><p>Consentimiento expreso del interesado (Art. 7, Ley 172-13) y ejecución del contrato de servicios.</p><h4>5. Conservación de datos</h4><p>Durante el período necesario para la prestación del servicio y el tiempo exigido por las obligaciones legales (mínimo 5 años).</p><h4>6. Derechos ARCO</h4><p>Puede ejercer sus derechos de <strong>Acceso, Rectificación, Cancelación y Oposición</strong> escribiendo a <strong>datos@tejifactory.com</strong>. Atendemos en un plazo máximo de 15 días hábiles.</p><h4>7. Seguridad</h4><p>Este sitio usa HTTPS. Implementamos medidas técnicas y organizativas conforme al Art. 10 de la Ley 172-13.</p><div class="modal-ver">Versión 1.0 — Vigente desde enero 2026 · Ley 172-13 RD</div></div></div></div>
 
-<!-- COOKIES -->
-<div class="modal-bg" id="mCk" role="dialog" aria-modal="true" aria-labelledby="lblCk" onclick="bgClose(event,this)">
-  <div class="modal">
-    <div class="modal-top"><h3 id="lblCk">Política de Cookies</h3><button class="modal-x" onclick="cerrar('cookies')" aria-label="Cerrar">✕</button></div>
-    <div class="modal-body">
-      <p>Este sitio usa cookies conforme al principio de transparencia de la Ley No. 172-13.</p>
-      <h4>Cookies esenciales (siempre activas)</h4>
-      <p>Necesarias para el funcionamiento básico del sitio: sesión, seguridad y preferencias. No pueden desactivarse.</p>
-      <h4>Cookies de análisis (requieren consentimiento)</h4>
-      <p>Usamos herramientas de analítica (Google Analytics) para entender la interacción de los usuarios con el sitio. Los datos son anónimos y estadísticos.</p>
-      <h4>Cookies de marketing (requieren consentimiento)</h4>
-      <p>Permiten mostrar publicidad relevante en otras plataformas. Solo se activan con la aceptación total.</p>
-      <h4>Gestión</h4>
-      <p>Al acceder por primera vez aparece un aviso donde puede elegir. Puede cambiar su preferencia eliminando las cookies del navegador o contactando datos@tejifactory.com.</p>
-      <div class="modal-ver">Versión 1.0 — Vigente desde enero 2026 · Ley 172-13 RD</div>
-    </div>
-  </div>
-</div>
+<div class="modal-bg" id="mCk" role="dialog" aria-modal="true" onclick="bgClose(event,this)"><div class="modal"><div class="modal-top"><h3>Política de Cookies</h3><button class="modal-x" onclick="cerrar('cookies')">✕</button></div><div class="modal-body"><p>Este sitio usa cookies conforme al principio de transparencia de la Ley No. 172-13.</p><h4>Cookies esenciales (siempre activas)</h4><p>Necesarias para el funcionamiento básico del sitio. No pueden desactivarse.</p><h4>Cookies de análisis (requieren consentimiento)</h4><p>Herramientas de analítica para entender la interacción de los usuarios. Datos anónimos.</p><h4>Cookies de marketing (requieren consentimiento)</h4><p>Solo se activan con la aceptación total.</p><div class="modal-ver">Versión 1.0 — Vigente desde enero 2026 · Ley 172-13 RD</div></div></div></div>
 
-<!-- ══════════════════════ ADMIN PANEL ═══════════════════════ -->
+<!-- ADMIN PANEL -->
 <div class="admin-panel" id="adminPanel">
-  <div id="adminLogin" class="admin-login">
-    <div class="admin-box">
-      <h2>Área privada</h2>
-      <p>Teji Factory — Solo personal autorizado</p>
-      <div class="f" style="margin-bottom:14px;">
-        <label for="aPass">Contraseña</label>
-        <input type="password" id="aPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')loginA()">
-      </div>
-      <button onclick="loginA()" class="btn btn-negro" style="width:100%;justify-content:center;padding:12px;">Ingresar</button>
-      <div id="aErr" style="display:none;color:#DC2626;font-size:.82rem;margin-top:10px;text-align:center;">Contraseña incorrecta.</div>
-    </div>
-  </div>
+  <div id="adminLogin" class="admin-login"><div class="admin-box"><h2>Área privada</h2><p>Teji Factory — Solo personal autorizado</p><div class="f" style="margin-bottom:14px;"><label for="aPass">Contraseña</label><input type="password" id="aPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')loginA()"></div><button onclick="loginA()" class="btn-submit" style="text-transform:uppercase;letter-spacing:.1em;">Ingresar</button><div id="aErr" style="display:none;color:#DC2626;font-size:.82rem;margin-top:10px;text-align:center;">Contraseña incorrecta.</div></div></div>
   <div id="adminCont" style="display:none;">
-    <div class="hdr">
-      <div class="c">
-        <div class="hdr-row">
-          <div class="logo"><div class="logo-mark">TF</div><div class="logo-name"><em>Admin</em></div></div>
-          <div style="margin-left:auto;display:flex;gap:10px;">
-            <button onclick="exportCSV()" class="btn btn-linea" style="font-size:.84rem;padding:8px 16px;">Exportar CSV</button>
-            <button onclick="cerrarAdmin()" class="btn btn-negro" style="font-size:.84rem;padding:8px 16px;">Volver al sitio</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="admin-cont">
-      <div class="admin-top2">
-        <h2>Registros del sitio</h2>
-        <div style="font-size:.84rem;color:var(--muted);" id="aResumen">—</div>
-      </div>
-      <div class="admin-tabs">
-        <button class="a-tab on" onclick="atab(this,'tC')">Consentimientos</button>
-        <button class="a-tab"    onclick="atab(this,'tF')">Formularios</button>
-        <button class="a-tab"    onclick="atab(this,'tCk')">Cookies</button>
-      </div>
-      <div id="tC">
-        <div class="tbl-wrap">
-          <table class="tbl">
-            <thead><tr><th>Fecha y hora</th><th>Nombre</th><th>Email</th><th>Empresa</th><th>T&amp;C</th><th>Privacidad</th><th>Versión docs</th><th>IP</th></tr></thead>
-            <tbody id="tbC"><tr><td colspan="8" class="tbl-vacia">Sin registros aún.</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-      <div id="tF" style="display:none;">
-        <div class="tbl-wrap">
-          <table class="tbl">
-            <thead><tr><th>Fecha</th><th>Nombre</th><th>Empresa</th><th>Email</th><th>Teléfono</th><th>Cantidad</th><th>Mensaje</th></tr></thead>
-            <tbody id="tbF"><tr><td colspan="7" class="tbl-vacia">Sin formularios aún.</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-      <div id="tCk" style="display:none;">
-        <div class="tbl-wrap">
-          <table class="tbl">
-            <thead><tr><th>Fecha y hora</th><th>Decisión</th><th>IP</th></tr></thead>
-            <tbody id="tbCk"><tr><td colspan="3" class="tbl-vacia">Sin registros de cookies aún.</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-      <div class="admin-nota">
-        <strong>Demo:</strong> Los datos se guardan en localStorage del navegador. En producción se almacenarán en base de datos del servidor y la IP será la IP real del cliente. Cambiar la contraseña antes de publicar en producción.
-      </div>
-    </div>
+    <div style="background:#0D0D0D;border-bottom:1px solid rgba(255,255,255,.1);"><div class="c"><div class="hdr-row"><div class="logo" style="color:#fff"><div class="logo-mark" style="border-color:rgba(255,255,255,.4);color:#fff">TF</div><span class="logo-name">Admin</span></div><div style="margin-left:auto;display:flex;gap:10px;"><button onclick="exportCSV()" class="btn" style="font-size:.8rem;padding:8px 16px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);">Exportar CSV</button><button onclick="cerrarAdmin()" class="btn" style="font-size:.8rem;padding:8px 16px;background:#fff;color:#0D0D0D;">Volver al sitio</button></div></div></div></div>
+    <div class="admin-cont"><div class="admin-top2"><h2>Registros del sitio</h2><div style="font-size:.84rem;color:var(--muted);" id="aRes">—</div></div><div class="admin-tabs"><button class="a-tab on" onclick="atab(this,'tC')">Consentimientos</button><button class="a-tab" onclick="atab(this,'tF')">Formularios</button><button class="a-tab" onclick="atab(this,'tCk')">Cookies</button></div>
+    <div id="tC"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Fecha</th><th>Nombre</th><th>Email</th><th>Empresa</th><th>T&amp;C</th><th>Privacidad</th><th>Versión</th><th>IP</th></tr></thead><tbody id="tbC"><tr><td colspan="8" class="tbl-vacia">Sin registros aún.</td></tr></tbody></table></div></div>
+    <div id="tF" style="display:none;"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Fecha</th><th>Nombre</th><th>Empresa</th><th>Email</th><th>Tel</th><th>Cantidad</th><th>Mensaje</th></tr></thead><tbody id="tbF"><tr><td colspan="7" class="tbl-vacia">Sin formularios aún.</td></tr></tbody></table></div></div>
+    <div id="tCk" style="display:none;"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Fecha</th><th>Decisión</th><th>IP</th></tr></thead><tbody id="tbCk"><tr><td colspan="3" class="tbl-vacia">Sin registros aún.</td></tr></tbody></table></div></div>
+    <div class="admin-nota"><strong>Demo:</strong> Datos en localStorage del navegador. En producción irán al servidor con IP real del cliente. Cambiar la contraseña antes de publicar.</div></div>
   </div>
 </div>
 
-<!-- ══════════════════════ JS ═════════════════════════════════ -->
 <script>
-  const VER = { tc: 'T&C v1.0 (ene-2026)', pr: 'Privacidad v1.0 (ene-2026)' };
+  /* ── CONSTANTES ── */
+  const VER  = { tc:'T&C v1.0 (ene-2026)', pr:'Privacidad v1.0 (ene-2026)' };
   const PASS = 'teji2026';
 
-  /* utils */
+  /* ── UTILS ── */
   function esc(s){ if(!s)return'—'; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function fip(){ return 'sim-'+Math.floor(Math.random()*220+1)+'.'+Math.floor(Math.random()*220+1)+'.x.x'; }
   function ls(k,v){ try{ if(v!==undefined){ localStorage.setItem(k,JSON.stringify(v)); return v; } return JSON.parse(localStorage.getItem(k)||'[]'); }catch(e){ return v!==undefined?v:[]; } }
 
-  /* cookies */
-  function ckSi(){ saveCk('todas'); hideBanner(); }
-  function ckNo(){ saveCk('esenciales'); hideBanner(); }
-  function saveCk(t){ const r=ls('tf_ck'); r.push({fecha:new Date().toISOString(),decision:t,ip:fip()}); ls('tf_ck',r); ls('tf_ck_ok',t); }
-  function hideBanner(){ document.getElementById('ckBanner').classList.remove('on'); }
+  /* ── HEADER TRANSPARENTE ── */
+  const hdr  = document.getElementById('hdr');
+  const hero = document.getElementById('inicio');
+  function checkScroll(){ hdr.classList.toggle('solid', window.scrollY > hero.offsetHeight - 90); }
+  window.addEventListener('scroll', checkScroll, { passive: true });
+  checkScroll();
 
-  /* modales */
-  const mMap = { terminos:'mTC', privacidad:'mPr', cookies:'mCk' };
+  /* ── SCROLL FADE IN ── */
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1, rootMargin: '-30px' });
+  document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+  /* ── COOKIES ── */
+  function ckSi(){ saveCk('todas'); hideCk(); }
+  function ckNo(){ saveCk('esenciales'); hideCk(); }
+  function saveCk(t){ const r=ls('tf_ck'); r.push({fecha:new Date().toISOString(),decision:t,ip:fip()}); ls('tf_ck',r); ls('tf_ck_ok',t); }
+  function hideCk(){ document.getElementById('ckBanner').classList.remove('on'); }
+
+  /* ── MODALES ── */
+  const mMap={ terminos:'mTC', privacidad:'mPr', cookies:'mCk' };
   function modal(t){ const m=document.getElementById(mMap[t]); if(!m)return; m.classList.add('on'); document.body.style.overflow='hidden'; setTimeout(()=>m.querySelector('.modal-x').focus(),360); }
   function cerrar(t){ const m=document.getElementById(mMap[t]); if(!m)return; m.classList.remove('on'); document.body.style.overflow=''; }
   function bgClose(e,el){ if(e.target===el){ el.classList.remove('on'); document.body.style.overflow=''; } }
   document.addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySelectorAll('.modal-bg.on').forEach(m=>{ m.classList.remove('on'); document.body.style.overflow=''; }); });
 
-  /* catálogo */
+  /* ── CATÁLOGO FILTER ── */
   function filtrar(btn){ const c=btn.dataset.c; document.querySelectorAll('.cat').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); document.querySelectorAll('.prod').forEach(p=>{ p.style.display=(c==='todos'||p.dataset.c===c)?'flex':'none'; }); }
-
   function cotizar(n){ const t=document.getElementById('msg'); if(t){ t.value='Cotización para: '+n+'\n\n'; document.getElementById('contacto').scrollIntoView({behavior:'smooth'}); setTimeout(()=>t.focus(),600); } }
 
-  /* formulario */
+  /* ── FORMULARIO ── */
   function enviar(e){ e.preventDefault(); const f=e.target;
     const d={fecha:new Date().toISOString(),nom:f.nom.value,emp:f.emp.value,eml:f.eml.value,tel:f.tel.value,cant:f.cant.value,msg:f.msg.value};
-    const c={fecha:new Date().toISOString(),nom:d.nom,eml:d.eml,emp:d.emp,tc:f.ckTC.checked,pr:f.ckPr.checked,vTC:VER.tc,vPr:VER.pr,ip:fip(),ua:navigator.userAgent.substring(0,80)};
+    const c={fecha:new Date().toISOString(),nom:d.nom,eml:d.eml,emp:d.emp,tc:f.ckTC.checked,pr:f.ckPr.checked,vTC:VER.tc,vPr:VER.pr,ip:fip()};
     const forms=ls('tf_forms'); forms.push(d); ls('tf_forms',forms);
     const cons=ls('tf_cons'); cons.push(c); ls('tf_cons',cons);
     f.style.display='none'; document.getElementById('msgOk').style.display='block';
   }
 
-  /* admin */
+  /* ── ADMIN ── */
   function abrirAdmin(){ document.getElementById('adminPanel').classList.add('on'); document.body.style.overflow='hidden'; window.scrollTo(0,0); }
   function cerrarAdmin(){ document.getElementById('adminPanel').classList.remove('on'); document.body.style.overflow=''; document.getElementById('adminCont').style.display='none'; document.getElementById('adminLogin').style.display='flex'; }
   function loginA(){ if(document.getElementById('aPass').value===PASS){ document.getElementById('aErr').style.display='none'; document.getElementById('adminLogin').style.display='none'; document.getElementById('adminCont').style.display='block'; loadAdmin(); }else{ document.getElementById('aErr').style.display='block'; } }
@@ -970,7 +767,7 @@
 
   function loadAdmin(){
     const cons=ls('tf_cons'), forms=ls('tf_forms'), cks=ls('tf_ck');
-    document.getElementById('aResumen').textContent=cons.length+' consentimientos · '+forms.length+' formularios · '+cks.length+' cookies';
+    document.getElementById('aRes').textContent=cons.length+' consentimientos · '+forms.length+' formularios · '+cks.length+' cookies';
     const tbC=document.getElementById('tbC');
     tbC.innerHTML=cons.length?[...cons].reverse().map(c=>`<tr><td>${new Date(c.fecha).toLocaleString('es-DO')}</td><td>${esc(c.nom)}</td><td>${esc(c.eml)}</td><td>${esc(c.emp)}</td><td><span class="badge b-verde">${c.tc?'Sí':'—'}</span></td><td><span class="badge b-verde">${c.pr?'Sí':'—'}</span></td><td style="font-size:.76rem">${esc(c.vTC)}<br>${esc(c.vPr)}</td><td style="font-size:.76rem">${esc(c.ip)}</td></tr>`).join(''):'<tr><td colspan="8" class="tbl-vacia">Sin registros.</td></tr>';
     const tbF=document.getElementById('tbF');
@@ -987,9 +784,9 @@
     const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'})); a.download='consentimientos_teji_'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
   }
 
-  /* init */
+  /* ── INIT ── */
   window.addEventListener('DOMContentLoaded',()=>{
-    try{ if(!ls('tf_ck_ok')) setTimeout(()=>document.getElementById('ckBanner').classList.add('on'),1400); }catch(e){ document.getElementById('ckBanner').classList.add('on'); }
+    try{ if(!ls('tf_ck_ok')) setTimeout(()=>document.getElementById('ckBanner').classList.add('on'),1800); }catch(e){ document.getElementById('ckBanner').classList.add('on'); }
   });
 </script>
 </body>
