@@ -10,8 +10,8 @@ window.UPT_CONFIG = {
   empresa: 'TejiFactory SAS',
 
   contacto: {
-    whatsapp: '573042611577',            // solo dígitos, con código de país
-    whatsappVisible: '+57 (304) 261-1577',
+    whatsapp: '50769498590',             // solo dígitos, con código de país
+    whatsappVisible: '+507 6949-8590',
     correo: 'hola@upt.do',              // EJEMPLO
     correoDatos: 'datos@upt.do',        // EJEMPLO · canal ARCO (Ley 172-13)
     ciudad: 'Santo Domingo, República Dominicana',
