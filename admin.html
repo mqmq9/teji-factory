@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Área privada · UPT — Uniformes Para Todos</title>
+  <meta name="description" content="Panel interno de UPT: cotizaciones, consentimientos y registros de cookies.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#12224A">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2312224A'/%3E%3Ctext x='32' y='43' font-family='Arial Black,Arial' font-weight='900' font-size='26' text-anchor='middle' fill='white'%3EUP%3Ctspan fill='%23FF4D63'%3ET%3C/tspan%3E%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body data-page="admin">
+<main id="main">
+  <div class="admin-login" id="login">
+    <form class="admin-box" id="loginForm" novalidate>
+      <p class="eyebrow">Solo personal autorizado</p>
+      <h1>Área privada</h1>
+      <p class="muted" style="margin-bottom:24px">Cotizaciones, consentimientos y registros de cookies guardados en este navegador.</p>
+      <div class="field" id="passField">
+        <label for="pass">Contraseña</label>
+        <input type="password" id="pass" autocomplete="current-password">
+        <span class="err" id="pass-err">Contraseña incorrecta. Inténtalo de nuevo.</span>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+    </form>
+  </div>
+
+  <section class="sec-tight" id="panel" hidden>
+    <div class="wrap">
+      <div class="admin-bar">
+        <div>
+          <p class="eyebrow">Panel UPT</p>
+          <h1 class="h2">Registros del sitio</h1>
+          <p class="muted" id="resumen" style="margin-top:8px"></p>
+        </div>
+        <div class="hero-actions">
+          <button type="button" class="btn btn-secondary btn-sm" id="exportar">Exportar CSV</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="borrar">Borrar datos de prueba</button>
+          <button type="button" class="btn btn-primary btn-sm" id="salir">Cerrar sesión</button>
+        </div>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Tipo de registro">
+        <button class="tab" role="tab" id="tab-cot" aria-controls="p-cot" aria-selected="true">Cotizaciones</button>
+        <button class="tab" role="tab" id="tab-cons" aria-controls="p-cons" aria-selected="false" tabindex="-1">Consentimientos</button>
+        <button class="tab" role="tab" id="tab-ck" aria-controls="p-ck" aria-selected="false" tabindex="-1">Cookies</button>
+      </div>
+      <div role="tabpanel" id="p-cot" aria-labelledby="tab-cot"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Referencia</th><th>Fecha</th><th>Institución</th><th>Tipo</th><th>Contacto</th><th>Prendas</th><th>Total</th><th>Diseño</th><th>Logo en</th><th>Fecha deseada</th></tr></thead><tbody id="tb-cot"></tbody></table></div></div>
+      <div role="tabpanel" id="p-cons" aria-labelledby="tab-cons" hidden><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Fecha</th><th>Referencia</th><th>Nombre</th><th>Correo</th><th>Institución</th><th>Términos</th><th>Privacidad</th><th>Versiones</th></tr></thead><tbody id="tb-cons"></tbody></table></div></div>
+      <div role="tabpanel" id="p-ck" aria-labelledby="tab-ck" hidden><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Fecha</th><th>Decisión</th></tr></thead><tbody id="tb-ck"></tbody></table></div></div>
+      <p class="note"><strong>Prototipo:</strong> los datos viven en el localStorage de este navegador. En producción irán a un servidor. Cambia la contraseña en <code>js/config.js</code> antes de publicar.</p>
+    </div>
+  </section>
+</main>
+<script src="js/config.js"></script>
+<script src="js/productos.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
