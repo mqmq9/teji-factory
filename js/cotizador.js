@@ -319,6 +319,7 @@
       '<a class="btn btn-secondary" href="cotizacion.html">Hacer otra cotización</a><a class="btn btn-secondary" href="catalogo.html">Volver al catálogo</a></div></div>';
     var h = root.querySelector('h2'); h.focus({ preventScroll: true });
     root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    window.open(window.uptWaLink(msg), '_blank');
   }
 
   render(false);
