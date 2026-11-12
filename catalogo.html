@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catálogo · UPT — Uniformes Para Todos</title>
+  <meta name="description" content="Chaquetas, abrigos, ropa deportiva y calzado 100% personalizados para colegios, universidades, equipos y empresas en República Dominicana.">
+  <meta name="theme-color" content="#12224A">
+  <meta property="og:title" content="Catálogo · UPT">
+  <meta property="og:description" content="Siete prendas, todas con tu escudo.">
+  <meta property="og:image" content="img/productos/hoodie-premium.jpg">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2312224A'/%3E%3Ctext x='32' y='43' font-family='Arial Black,Arial' font-weight='900' font-size='26' text-anchor='middle' fill='white'%3EUP%3Ctspan fill='%23FF4D63'%3ET%3C/tspan%3E%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body data-page="catalogo">
+<main id="main">
+  <div id="vistaLista">
+    <section class="page-hero">
+      <div class="wrap enter">
+        <p class="crumbs"><a href="index.html">Inicio</a> / Catálogo</p>
+        <h1>Siete prendas,<br>todas con tu escudo</h1>
+        <p class="lead">Elige una base y la hacemos tuya: colores, escudo, mascota, nombre y marquillas. Sin precios de lista; cada dotación se cotiza a la medida.</p>
+      </div>
+    </section>
+    <section class="sec-tight">
+      <div class="wrap">
+        <p class="alert" id="noEncontrado" hidden>No encontramos esa prenda. Estas son todas las que tenemos.</p>
+        <div class="toolbar">
+          <div class="chips" id="chips" role="group" aria-label="Filtrar por categoría"></div>
+          <form class="search" id="formBuscar" role="search">
+            <label for="buscar" class="sr-only">Buscar prendas</label>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input type="search" id="buscar" placeholder="Buscar: chaqueta, bordado, dryfit…" autocomplete="off">
+          </form>
+        </div>
+        <p class="result-count" id="resCount" aria-live="polite"></p>
+        <div class="prod-grid" id="catGrid"></div>
+      </div>
+    </section>
+    <section class="sec-tight" style="padding-top:0">
+      <div class="wrap">
+        <div class="cta">
+          <div>
+            <h2 class="h2">¿Necesitas algo<br>que no ves aquí?</h2>
+            <p>Cuéntanos la idea en la cotización. Si se puede tejer, bordar o sublimar, lo conversamos.</p>
+          </div>
+          <div class="cta-actions">
+            <a href="cotizacion.html" class="btn btn-light">Armar mi cotización</a>
+            <a href="#" data-wa target="_blank" rel="noopener" class="btn btn-ghost-light">Escribir por WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div id="vistaDetalle" hidden></div>
+</main>
+<script src="js/config.js"></script>
+<script src="js/productos.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/catalogo.js"></script>
+</body>
+</html>

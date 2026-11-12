@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Política de cookies · UPT — Uniformes Para Todos</title>
+  <meta name="description" content="Qué cookies y almacenamiento local usa el sitio de UPT y cómo cambiar tu elección.">
+  <meta name="theme-color" content="#12224A">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2312224A'/%3E%3Ctext x='32' y='43' font-family='Arial Black,Arial' font-weight='900' font-size='26' text-anchor='middle' fill='white'%3EUP%3Ctspan fill='%23FF4D63'%3ET%3C/tspan%3E%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body data-page="cookies">
+<main id="main">
+  <section class="page-hero">
+    <div class="wrap enter">
+      <p class="crumbs"><a href="index.html">Inicio</a> / Legal</p>
+      <h1>Política de cookies</h1>
+      <p class="lead">Usamos lo mínimo para que el sitio funcione. Lo demás, solo si lo aceptas.</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="wrap legal-layout">
+      <nav class="legal-nav" aria-label="Documentos legales">
+        <a href="terminos.html">Términos y condiciones</a>
+        <a href="privacidad.html">Política de privacidad</a>
+        <a href="cookies.html" aria-current="page">Política de cookies</a>
+      </nav>
+      <article class="prose">
+        <p>Este sitio usa cookies y almacenamiento local del navegador conforme al principio de transparencia de la Ley No. 172-13.</p>
+        <h2>Esenciales (siempre activas)</h2>
+        <p>Guardan tu elección sobre cookies y el avance del cotizador para que no pierdas lo que llevas si recargas la página. No se pueden desactivar.</p>
+        <h2>De análisis (con tu consentimiento)</h2>
+        <p>Nos ayudarían a entender cómo se usa el sitio con datos anónimos. Solo se activan si eliges “Aceptar”.</p>
+        <h2>Cambiar tu elección</h2>
+        <p>Puedes volver a decidir en cualquier momento.</p>
+        <p><button type="button" class="btn btn-secondary" id="resetCk">Volver a elegir cookies</button></p>
+        <p id="ckEstado" class="muted" role="status"></p>
+        <p class="ver">Versión 2.0 · Vigente desde noviembre de 2026 · Ley 172-13 RD</p>
+      </article>
+    </div>
+  </section>
+</main>
+<script src="js/config.js"></script>
+<script src="js/productos.js"></script>
+<script src="js/layout.js"></script>
+<script>
+  (function(){var e=document.getElementById('ckEstado'),v=window.uptStore('upt_ck_ok');
+  e.textContent=v?('Tu elección actual: '+(v==='todas'?'aceptaste todas las cookies.':'solo cookies esenciales.')):'Aún no has elegido.';
+  document.getElementById('resetCk').addEventListener('click',function(){try{localStorage.removeItem('upt_ck_ok');}catch(x){}location.reload();});})();
+</script>
+</body>
+</html>
